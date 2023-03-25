@@ -4,6 +4,7 @@ const http = require('https');
 
 const YuGiOhDatabaseVersion = require('../models/yugioh_db_version');
 const YuGiOhCardSet = require('../models/yugioh_cardset');
+const YuGiOhArchetype = require('../models/yugioh_archetype');
 
 router.get('/db_version', function(req, res, next){ 
     var options = {
@@ -55,6 +56,40 @@ router.get('/card_sets', function(req, res, next){
                         res.send({
                             'deleted_data': deletedData,
                             'new_version': newCardSets
+                        })
+                    }).catch(next);
+                }).catch(next);
+            });
+        } else {
+            res.status(500).send({error: 'Internal Server Error'});
+        }
+    }).end();
+});
+
+router.get('/archetypes', function(req, res, next){ 
+    var options = {
+        host: 'db.ygoprodeck.com',
+        path: '/api/v7/archetypes.php',
+        method: 'GET'
+    };
+    http.request(options, function(response){
+        if (('' + response.statusCode).match(/^2\d\d$/)) {
+            var dataChunks = [];
+            response.on('data', function (data) {
+                dataChunks.push(data);
+            });
+
+            response.on('end', function() {
+                var data = Buffer.concat(dataChunks);
+                console.log('BODY: ' + data); 
+                
+                var archetypes = JSON.parse(data);
+
+                YuGiOhArchetype.deleteMany({}).then(function(deletedData){
+                    YuGiOhArchetype.insertMany(archetypes).then(function(newArchetypes){
+                        res.send({
+                            'deleted_data': deletedData,
+                            'new_version': archetypes
                         })
                     }).catch(next);
                 }).catch(next);
