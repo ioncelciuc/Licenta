@@ -4,9 +4,13 @@ const mongoose = require('mongoose');
 
 const app = express();
 
+mongoose.connect('mongodb://127.0.0.1/yugioh');
+mongoose.Promise = global.Promise;
+
 app.use(bodyParser.json());
 
 app.use('/api', require('./routes/api'));
+app.use('/get_necessary_data', require('./routes/fetch_data'));
 
 app.use(function(req, res){
     res.status(404).send({error: "Endpoint does not exist"});
