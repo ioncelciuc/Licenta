@@ -1,58 +1,21 @@
 const express = require('express');
 const router = express.Router();
+const ApiController = require('../controllers/api_controller');
 
-const YuGiOhDatabaseVersion = require('../models/yugioh_db_version');
-const YuGiOhCardSet = require('../models/yugioh_cardset');
-const YuGiOhArchetype = require('../models/yugioh_archetype');
-const YuGiOhCard = require('../models/yugioh_card');
-const YuGiOhImage = require('../models/yugioh_image');
+router.get('/db_version', ApiController.get_db_version);
 
-router.get('/db_version', function(req, res, next){
-    YuGiOhDatabaseVersion.find({}).then(function(dbVersion){
-        res.send(dbVersion);
-    }).catch(next);
-});
+router.get('/card_sets', ApiController.get_card_sets);
 
-router.get('/card_sets', function(req, res, next){
-    YuGiOhCardSet.find({}).then(function(cardSets){
-        res.send(cardSets);
-    }).catch(next);
-});
+router.get('/archetypes', ApiController.get_archetypes);
 
-router.get('/archetypes', function(req, res, next){
-    YuGiOhArchetype.find({}).then(function(archetypes){
-        res.send(archetypes);
-    }).catch(next);
-});
+router.get('/cards', ApiController.get_cards);
 
-router.get('/cards', function(req, res, next){
-    YuGiOhCard.find({}).then(function(cards){
-        res.send(cards);
-    });
-});
+router.get('/images/:id', ApiController.get_all_images_by_id);
 
-router.get('/images/:id', function(req, res, next){
-    YuGiOhImage.find({id: req.params.id}).then(function(image){
-        res.send(image);
-    });
-});
+router.get('/image/:id', ApiController.get_image_by_id);
 
-router.get('/image/:id', function(req, res, next){
-    YuGiOhImage.find({id: req.params.id}, {id: 1, image_url: 1}).then(function(image){
-        res.send(image);
-    });
-});
+router.get('/image_small/:id', ApiController.get_image_small_by_id);
 
-router.get('/image_small/:id', function(req, res, next){
-    YuGiOhImage.find({id: req.params.id}, {id: 1, image_url_small: 1}).then(function(image){
-        res.send(image);
-    });
-});
-
-router.get('/image_cropped/:id', function(req, res, next){
-    YuGiOhImage.find({id: req.params.id}, {id: 1, image_url_cropped: 1}).then(function(image){
-        res.send(image);
-    });
-});
+router.get('/image_cropped/:id', ApiController.get_image_cropped_by_id);
 
 module.exports = router;
