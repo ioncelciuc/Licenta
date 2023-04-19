@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
 const User = require('../models/user');
 
@@ -35,6 +37,38 @@ router.post('/signup', function(req, res, next){
             });
         }
     });
+});
+
+router.post('/signin', function(req, res, next){
+    User.find({username: req.body.username})
+    .exec()
+    .then(user => {
+        if(user.length < 1){
+            return res.status(401).send({'message': 'Sign in failed.'});
+        }
+        bcrypt.compare(req.body.password, user[0].password, (err, result) => {
+            if(err){
+                return res.status(401).send({'message': 'Sign in failed.'});
+            }
+            if(result){
+                const token = jwt.sign({
+                    'username': user[0].username,
+                    'id': user[0]._id
+                    },
+                    process.env.JWT_KEY,
+                    {
+                        expiresIn: "1h"
+                    }
+                );
+                return res.status(200).send({
+                    'message': 'Sign in successfull',
+                    'token': token
+                });
+            }
+            return res.status(401).send({'message': 'Sign in failed.'});
+        });
+    })
+    .catch(next);
 });
 
 module.exports = router;
