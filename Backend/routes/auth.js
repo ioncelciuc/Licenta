@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
+const checkAuth = require('../middleware/check_auth');
 
 const User = require('../models/user');
 
@@ -27,7 +28,7 @@ router.post('/signup', function(req, res, next){
                     .save()
                     .then(result => {
                         console.log(result);
-                        res.status(201).send({message: "user created"});
+                        res.status(201).send({message: "User created"});
                     })
                     .catch(err => {
                         console.log(err);
@@ -62,11 +63,23 @@ router.post('/signin', function(req, res, next){
                 );
                 return res.status(200).send({
                     'message': 'Sign in successfull',
+                    'id': user[0]._id,
+                    'username': user[0].username,
                     'token': token
                 });
             }
             return res.status(401).send({'message': 'Sign in failed.'});
         });
+    })
+    .catch(next);
+});
+
+router.post('/delete', checkAuth , function(req, res, next){
+    console.log(req.userData);
+    User.deleteOne({username: req.body.username})
+    .exec()
+    .then(result => {
+        res.send({message: result});
     })
     .catch(next);
 });
