@@ -4,54 +4,47 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 require('dotenv').config();
 
-exports.signup = function(req, res, next){
-    User.find({username: req.body.username})
-    .exec()
-    .then(user => {
-        if(user.length >= 1){
-            res.status(409).send({message: "User already exists"});
-        }else{
-            bcrypt.hash(req.body.password, 10, (err, hash) => {
-                if(err){
-                    res.status(500).send({error: err});
-                }else{
-                    const user = new User({
-                        _id: new mongoose.Types.ObjectId(),
-                        username: req.body.username,
-                        password: hash
-                    });
-                    user
-                    .save()
-                    .then(result => {
-                        console.log(result);
-                        res.status(201).send({message: "User created"});
-                    })
-                    .catch(err => {
-                        console.log(err);
-                        res.status(500).send({error: err});
-                    });
-                }
-            });
+exports.signup = async function (req, res, next) {
+    try {
+        const user = await User.find({ username: req.body.username })
+        if (user.length >= 1) {
+            return res.status(409).send({ message: "User already exists" });
         }
-    });
+        bcrypt.hash(req.body.password, 10, async (err, hash) => {
+            if (err) {
+                res.status(500).send({ error: err });
+            } else {
+                const user = new User({
+                    _id: new mongoose.Types.ObjectId(),
+                    username: req.body.username,
+                    password: hash
+                });
+                const result = await user.save();
+                console.log(result);
+                res.status(201).send({ message: "User created" });
+            }
+        });
+    } catch (e) {
+        console.log(e);
+        next(e);
+    }
 }
 
-exports.signin = function(req, res, next){
-    User.find({username: req.body.username})
-    .exec()
-    .then(user => {
-        if(user.length < 1){
-            return res.status(401).send({'message': 'Sign in failed.'});
+exports.signin = async function (req, res, next) {
+    try {
+        const user = await User.find({ username: req.body.username })
+        if (user.length < 1) {
+            return res.status(401).send({ 'message': 'Sign in failed.' });
         }
         bcrypt.compare(req.body.password, user[0].password, (err, result) => {
-            if(err){
-                return res.status(401).send({'message': 'Sign in failed.'});
+            if (err) {
+                return res.status(401).send({ 'message': 'Sign in failed.' });
             }
-            if(result){
+            if (result) {
                 const token = jwt.sign({
                     'username': user[0].username,
                     'id': user[0]._id
-                    },
+                },
                     process.env.JWT_KEY,
                     {
                         expiresIn: "1h"
@@ -64,18 +57,21 @@ exports.signin = function(req, res, next){
                     'token': token
                 });
             }
-            return res.status(401).send({'message': 'Sign in failed.'});
+            return res.status(401).send({ 'message': 'Sign in failed.' });
         });
-    })
-    .catch(next);
+    } catch (e) {
+        console.log(e);
+        next(e);
+    }
 }
 
-exports.delete = function(req, res, next){
-    console.log(req.userData);
-    User.deleteOne({username: req.userData.username})
-    .exec()
-    .then(result => {
-        res.send({message: result});
-    })
-    .catch(next);
+exports.delete = async function (req, res, next) {
+    try{
+        console.log(req.userData);
+        const result = await User.deleteOne({ username: req.userData.username });
+        res.send({ message: result });
+    }catch(e){
+        console.log(e);
+        next(e);
+    }
 }
