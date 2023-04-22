@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/screens/initial_screen.dart';
-import 'package:flutter_app/utils/dotenv_paths.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_app/screens/initial_screen/initial_screen.dart';
 
-void main() async {
-  await dotenv.load();
+void main() {
   runApp(const MyApp());
 }
 
