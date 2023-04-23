@@ -1,3 +1,4 @@
+import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/screens/initial/initial_screen.dart';
 
@@ -13,9 +14,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Yu-Gi-Oh! Companion',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+      theme: FlexThemeData.light(scheme: FlexScheme.tealM3),
+      darkTheme: FlexThemeData.dark(
+        scheme: FlexScheme.tealM3,
+        darkIsTrueBlack: true,
       ),
+      themeMode: ThemeMode.system,
       home: const InitialScreen(),
     );
   }
