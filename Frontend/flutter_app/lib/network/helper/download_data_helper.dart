@@ -5,6 +5,7 @@ import 'package:flutter_app/models/archetype.dart';
 import 'package:flutter_app/models/card_set.dart';
 import 'package:flutter_app/models/database_version.dart';
 import 'package:flutter_app/models/yugioh_card.dart';
+import 'package:flutter_app/models/yugioh_image.dart';
 import 'package:flutter_app/network/response/response.dart';
 import 'package:flutter_app/utils/dotenv_paths.dart';
 import 'package:http/http.dart' as http;
@@ -80,6 +81,24 @@ class DownloadDataHelper {
       return Response(success: true, obj: cards);
     } catch (e) {
       String message = "Error on download cards!";
+      log(message, error: e);
+      return Response(
+        success: false,
+        message: message,
+      );
+    }
+  }
+
+  static Future<Response> getImage(String cardId) async {
+    try {
+      String path = '${DotEnvPaths().getImage()}/$cardId';
+      http.Response res = await http.get(Uri.parse(path));
+      final jsonList = jsonDecode(res.body);
+      final json = jsonList[0];
+      YuGiOhImage image = YuGiOhImage.fromJson(json);
+      return Response(success: true, obj: image);
+    } catch (e) {
+      String message = "Error on download image with id: $cardId!";
       log(message, error: e);
       return Response(
         success: false,

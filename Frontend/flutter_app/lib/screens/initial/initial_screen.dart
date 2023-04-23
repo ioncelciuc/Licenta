@@ -7,6 +7,7 @@ import 'package:flutter_app/models/card_set.dart';
 import 'package:flutter_app/models/database_version.dart';
 import 'package:flutter_app/models/yugioh_card.dart';
 import 'package:flutter_app/models/yugioh_card_set.dart';
+import 'package:flutter_app/models/yugioh_image.dart';
 import 'package:flutter_app/screens/download_data/download_data_screen.dart';
 import 'package:flutter_app/screens/home/home_screen.dart';
 import 'package:flutter_app/utils/hive_helper.dart';
@@ -59,10 +60,14 @@ class _InitialScreenState extends State<InitialScreen> {
     if (!Hive.isAdapterRegistered(7)) {
       Hive.registerAdapter(CardPricesAdapter());
     }
+    if (!Hive.isAdapterRegistered(8)) {
+      Hive.registerAdapter(YuGiOhImageAdapter());
+    }
     await Hive.openBox<DatabaseVersion>(HiveHelper.databaseVersion);
     await Hive.openBox<CardSet>(HiveHelper.cardSets);
     await Hive.openBox<Archetype>(HiveHelper.archetypes);
     await Hive.openBox<YuGiOhCard>(HiveHelper.cards);
+    await Hive.openBox<YuGiOhImage>(HiveHelper.images);
     setState(() {
       isLoading = false;
     });

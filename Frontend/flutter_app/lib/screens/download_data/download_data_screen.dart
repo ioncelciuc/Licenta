@@ -20,7 +20,9 @@ class DownloadDataScreen extends StatelessWidget {
             return const DownloadDataInitialUi();
           }
           if (state is DownloadDataLoading) {
-            return const LoadingScreenUi();
+            return const LoadingScreenUi(
+              message: 'Downloading Data...',
+            );
           }
           if (state is DownloadDataFailed) {
             return const DownloadDataFailedUi();

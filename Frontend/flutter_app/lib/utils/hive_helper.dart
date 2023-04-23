@@ -2,6 +2,7 @@ import 'package:flutter_app/models/archetype.dart';
 import 'package:flutter_app/models/yugioh_card.dart';
 import 'package:flutter_app/models/card_set.dart';
 import 'package:flutter_app/models/database_version.dart';
+import 'package:flutter_app/models/yugioh_image.dart';
 import 'package:hive/hive.dart';
 
 class HiveHelper {
@@ -9,6 +10,7 @@ class HiveHelper {
   static const String cardSets = 'card_sets';
   static const String archetypes = 'archetypes';
   static const String cards = 'cards';
+  static const String images = 'images';
 
   static DatabaseVersion getDatabaseVersion() {
     return Hive.box<DatabaseVersion>(databaseVersion).values.toList()[0];
@@ -62,5 +64,19 @@ class HiveHelper {
 
   static Future<void> deleteCards() async {
     await Hive.box<YuGiOhCard>(cards).clear();
+  }
+
+  static Future<void> insertImage(YuGiOhImage image) async {
+    await Hive.box<YuGiOhImage>(images).add(image);
+  }
+
+  static Future<void> deleteImages() async {
+    await Hive.box<YuGiOhImage>(images).clear();
+  }
+
+  static YuGiOhImage getImage(String cardId) {
+    return Hive.box<YuGiOhImage>(images).values.firstWhere(
+        (image) => image.cardId == cardId,
+        orElse: () => YuGiOhImage());
   }
 }
