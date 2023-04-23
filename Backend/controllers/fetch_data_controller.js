@@ -138,64 +138,66 @@ exports.get_cards = function (req, res, next) {
     }).end();
 }
 
-exports.get_card_images = function (req, res, next) {
-    YuGiOhImage.deleteMany({}).then(function (deletedData) {
-        console.log("deleted: " + deletedData);
-        YuGiOhCard.find({}).then(async function (cardList) {
-            for (i = 0; i < cardList.length; i++) {
-                for (j = 0; j < cardList[i]['card_images'].length; j++) {
-                    console.log("Card number " + i + " image " + j);
-                    var imageId = cardList[i]['card_images'][j]['id'];
-                    console.log(imageId);
-                    var image = '';
-                    var image_small = '';
-                    var image_cropped = '';
-
-                    try {
-                        image = await getImageInBase64(
-                            '/images/cards/' + cardList[i]['card_images'][j]['id'] + '.jpg'
-                        );
-                    } catch (e) {
-                        console.log("error on image with id " + imageId + ' :' + e);
-                    }
-
-                    try {
-                        image_small = await getImageInBase64(
-                            '/images/cards/' + cardList[i]['card_images'][j]['id'] + '.jpg'
-                        );
-                    } catch (e) {
-                        console.log("error on image small with id " + imageId + ' :' + e);
-                    }
-
-                    try {
-                        image_cropped = await getImageInBase64(
-                            '/images/cards/' + cardList[i]['card_images'][j]['id'] + '.jpg'
-                        );
-                    } catch (e) {
-                        console.log("error on image cropped with id " + imageId + ' :' + e);
-                    }
-
-                    var img = {
-                        id: imageId,
-                        image_url: image,
-                        image_url_small: image_small,
-                        image_url_cropped: image_cropped,
-                    };
-                    
-                    try{
-                        YuGiOhImage.create(img);
-                    }catch(e){
-                        console.log('error inserting into db: ' + e);
-                    }
-
-                    console.log("Inserted image with id: " + imageId);
-
+exports.get_card_images = async function (req, res, next) {
+    try {
+        const resultDeletion = await YuGiOhImage.deleteMany({});
+        const cardList = await YuGiOhCard.find({});
+        for (i = 0; i < cardList.length; i++) {
+            for (j = 0; j < cardList[i]['card_images'].length; j++) {
+                console.log("Card number " + i + " image " + j);
+                var imageId = cardList[i]['card_images'][j]['id'];
+                console.log(imageId);
+                var image = '';
+                var image_small = '';
+                var image_cropped = '';
+                try {
+                    image = await getImageInBase64(
+                        '/images/cards/' + cardList[i]['card_images'][j]['id'] + '.jpg'
+                    );
+                } catch (e) {
+                    console.log("error on image with id " + imageId + ' :' + e);
                 }
-            }
 
-            console.log("ALL IMAGES UPLOADED IN DB!");
-        }).catch(next);
-    }).catch(next);
+                try {
+                    image_small = await getImageInBase64(
+                        '/images/cards/' + cardList[i]['card_images'][j]['id'] + '.jpg'
+                    );
+                } catch (e) {
+                    console.log("error on image small with id " + imageId + ' :' + e);
+                }
+
+                try {
+                    image_cropped = await getImageInBase64(
+                        '/images/cards/' + cardList[i]['card_images'][j]['id'] + '.jpg'
+                    );
+                } catch (e) {
+                    console.log("error on image cropped with id " + imageId + ' :' + e);
+                }
+
+                var img = {
+                    id: imageId,
+                    image_url: image,
+                    image_url_small: image_small,
+                    image_url_cropped: image_cropped,
+                };
+                
+                try{
+                    await YuGiOhImage.create(img);
+                }catch(e){
+                    console.log('error inserting into db: ' + e);
+                }
+
+                console.log("Inserted image with id: " + imageId);
+
+            }
+        }
+
+        //ADDED THIS LINE
+        res.send({message: "Images inserted in DB!"});
+    } catch (e) {
+        console.log(e);
+        next(e);
+    }
 }
 
 function getImageInBase64(imagePath) {
