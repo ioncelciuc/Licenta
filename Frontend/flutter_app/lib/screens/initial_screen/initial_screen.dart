@@ -34,14 +34,30 @@ class _InitialScreenState extends State<InitialScreen> {
     await Hive.initFlutter();
     await dotenv.load();
     await SharedPrefsHelper.instance.initializeSharedPreferences();
-    Hive.registerAdapter(DatabaseVersionAdapter());
-    Hive.registerAdapter(CardSetAdapter());
-    Hive.registerAdapter(ArchetypeAdapter());
-    Hive.registerAdapter(YuGiOhCardAdapter());
-    Hive.registerAdapter(YuGiOhCardSetAdapter());
-    Hive.registerAdapter(CardImageAdapter());
-    Hive.registerAdapter(BanlistInfoAdapter());
-    Hive.registerAdapter(CardPricesAdapter());
+    if (!Hive.isAdapterRegistered(0)) {
+      Hive.registerAdapter(DatabaseVersionAdapter());
+    }
+    if (!Hive.isAdapterRegistered(1)) {
+      Hive.registerAdapter(CardSetAdapter());
+    }
+    if (!Hive.isAdapterRegistered(2)) {
+      Hive.registerAdapter(ArchetypeAdapter());
+    }
+    if (!Hive.isAdapterRegistered(3)) {
+      Hive.registerAdapter(YuGiOhCardAdapter());
+    }
+    if (!Hive.isAdapterRegistered(4)) {
+      Hive.registerAdapter(YuGiOhCardSetAdapter());
+    }
+    if (!Hive.isAdapterRegistered(5)) {
+      Hive.registerAdapter(BanlistInfoAdapter());
+    }
+    if (!Hive.isAdapterRegistered(6)) {
+      Hive.registerAdapter(CardImageAdapter());
+    }
+    if (!Hive.isAdapterRegistered(7)) {
+      Hive.registerAdapter(CardPricesAdapter());
+    }
     await Hive.openBox<DatabaseVersion>(HiveHelper.databaseVersion);
     await Hive.openBox<CardSet>(HiveHelper.cardSets);
     await Hive.openBox<Archetype>(HiveHelper.archetypes);
@@ -63,6 +79,8 @@ class _InitialScreenState extends State<InitialScreen> {
     if (SharedPrefsHelper.instance.isDataDownloaded() == false) {
       return const DownloadDataScreen();
     }
-    return const Scaffold();
+    return const Scaffold(
+      backgroundColor: Colors.red,
+    );
   }
 }

@@ -3,6 +3,7 @@ import 'package:flutter_app/components/loading_screen_ui.dart';
 import 'package:flutter_app/cubit/download_data_cubit.dart';
 import 'package:flutter_app/screens/download_data_screen/download_data_failed_ui.dart';
 import 'package:flutter_app/screens/download_data_screen/download_data_initial_ui.dart';
+import 'package:flutter_app/screens/initial_screen/initial_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DownloadDataScreen extends StatelessWidget {
@@ -24,7 +25,7 @@ class DownloadDataScreen extends StatelessWidget {
           if (state is DownloadDataFailed) {
             return const DownloadDataFailedUi();
           }
-          return const Scaffold();
+          return const InitialScreen();
         },
       ),
     );

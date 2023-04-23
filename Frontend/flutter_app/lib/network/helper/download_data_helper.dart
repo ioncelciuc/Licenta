@@ -74,12 +74,9 @@ class DownloadDataHelper {
       http.Response res = await http.get(Uri.parse(path));
       final jsonList = jsonDecode(res.body);
       List<YuGiOhCard> cards = [];
-      print('we have the data');
       for (var json in jsonList) {
-        print(json);
         cards.add(YuGiOhCard.fromJson(json));
       }
-      print('parsed data');
       return Response(success: true, obj: cards);
     } catch (e) {
       String message = "Error on download cards!";

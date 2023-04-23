@@ -35,7 +35,7 @@ class YuGiOhCardSet {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['set_name'] = setName;
     data['set_code'] = setCode;
     data['set_rarity'] = setRarity;
