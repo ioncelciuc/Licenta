@@ -7,7 +7,8 @@ import 'package:flutter_app/models/card_set.dart';
 import 'package:flutter_app/models/database_version.dart';
 import 'package:flutter_app/models/yugioh_card.dart';
 import 'package:flutter_app/models/yugioh_card_set.dart';
-import 'package:flutter_app/screens/download_data_screen/download_data_screen.dart';
+import 'package:flutter_app/screens/download_data/download_data_screen.dart';
+import 'package:flutter_app/screens/home/home_screen.dart';
 import 'package:flutter_app/utils/hive_helper.dart';
 import 'package:flutter_app/utils/shared_prefs_helper.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -79,8 +80,6 @@ class _InitialScreenState extends State<InitialScreen> {
     if (SharedPrefsHelper.instance.isDataDownloaded() == false) {
       return const DownloadDataScreen();
     }
-    return const Scaffold(
-      backgroundColor: Colors.red,
-    );
+    return const HomeScreen();
   }
 }

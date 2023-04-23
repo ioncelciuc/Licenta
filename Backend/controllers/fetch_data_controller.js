@@ -6,6 +6,7 @@ const YuGiOhCardSet = require('../models/yugioh_cardset');
 const YuGiOhArchetype = require('../models/yugioh_archetype');
 const YuGiOhCard = require('../models/yugioh_card');
 const YuGiOhImage = require('../models/yugioh_image');
+const RawImage = require('../models/raw_image');
 
 exports.get_db_version = function (req, res, next) {
     var options = {
@@ -198,6 +199,29 @@ exports.get_card_images = async function (req, res, next) {
         console.log(e);
         next(e);
     }
+}
+
+exports.saveImage = async function(req, res, next){
+    const imageUrl = 'https://images.ygoprodeck.com/images/cards/42901635.jpg';
+    http.get(imageUrl, async function(response){
+        const chunks = [];
+        response.on('data', function(chunk) {
+            chunks.push(chunk);
+        });
+        response.on('end', async function() {
+            const buffer = Buffer.concat(chunks);
+            console.log(buffer);
+            const rawImage = new RawImage({
+                id: "42901635",
+                image: {
+                    data: buffer,
+                    contentType: 'image/jpeg'
+                }
+            });
+            await rawImage.save();
+            res.send({message: rawImage});
+        });
+    });
 }
 
 function getImageInBase64(imagePath) {
