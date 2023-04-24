@@ -42,6 +42,14 @@ class HiveHelper {
     return Hive.box<Archetype>(archetypes).values.toList().cast<Archetype>();
   }
 
+  static List<Archetype> getArchetypesByName(String seachParams) {
+    return Hive.box<Archetype>(archetypes)
+        .values
+        .where((element) =>
+            element.archetypeName.toLowerCase().contains(seachParams))
+        .toList();
+  }
+
   static Future<void> insetArchetypes(List<Archetype> archetypesList) async {
     for (Archetype archetype in archetypesList) {
       await Hive.box<Archetype>(archetypes).add(archetype);
@@ -54,6 +62,25 @@ class HiveHelper {
 
   static List<YuGiOhCard> getCards() {
     return Hive.box<YuGiOhCard>(cards).values.toList().cast<YuGiOhCard>();
+  }
+
+  static List<YuGiOhCard> getBannedCards() {
+    return Hive.box<YuGiOhCard>(cards).values.where((element) {
+      if (element.banlistInfo == null) {
+        return false;
+      }
+      if (element.banlistInfo!.banTcg == null) {
+        return false;
+      }
+      return true;
+    }).toList();
+  }
+
+  static List<YuGiOhCard> getArchetypeCards(String archetype) {
+    return Hive.box<YuGiOhCard>(cards)
+        .values
+        .where((element) => element.archetype == archetype)
+        .toList();
   }
 
   static Future<void> insetCards(List<YuGiOhCard> cardList) async {

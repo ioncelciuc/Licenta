@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/image_display.dart';
 import 'package:flutter_app/models/yugioh_card.dart';
+import 'package:flutter_app/utils/app_router.dart';
 
 class CardListTile extends StatelessWidget {
   final YuGiOhCard card;
@@ -11,13 +12,27 @@ class CardListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String generalInfo = (card.type!.contains('Spell')
+        ? 'SPELL / ${card.race}'
+        : (card.type!.contains('Trap')
+            ? 'TRAP / ${card.race}'
+            : '${card.attribute!.toUpperCase()} / ${card.race} / ${(card.type!.contains('Monster') ? card.type!.substring(0, card.type!.lastIndexOf('Monster')) : card.type)}'));
+    String stats = (card.attribute == null
+        ? ''
+        : (card.type!.contains('Link')
+            ? '${card.atk} / LINK-${card.linkval}'
+            : (card.type!.contains('Pendulum')
+                ? '${card.atk} / ${card.def} / LEVEL ${card.level} / SCALE ${card.scale}'
+                : '${card.atk} / ${card.def} / LEVEL ${card.level}')));
     return Card(
       margin: const EdgeInsets.only(left: 8, top: 8, right: 8),
       elevation: 5,
       child: InkWell(
-        onTap: () {},
+        onTap: () {
+          AppRouter.openCardDetailsPage(context, card);
+        },
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(6.0),
           child: SizedBox(
             height: 100,
             child: Row(
@@ -44,9 +59,11 @@ class CardListTile extends StatelessWidget {
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      Text(card.type!),
-                      Text(card.race!),
+                      Text(generalInfo),
+                      Text(stats),
                     ],
                   ),
                 )

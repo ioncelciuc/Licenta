@@ -20,15 +20,6 @@ class CustomButton extends StatelessWidget {
       children: [
         Expanded(
           child: MaterialButton(
-            child: Text(
-              '$title',
-              style: TextStyle(
-                fontSize: 18,
-                // color: AdaptiveTheme.of(context).mode.isDark
-                //     ? Colors.black
-                //     : Colors.white,
-              ),
-            ),
             onPressed: onPressed,
             padding: const EdgeInsets.symmetric(
               vertical: 16,
@@ -38,6 +29,12 @@ class CustomButton extends StatelessWidget {
             color: Theme.of(context).primaryColor,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(30),
+            ),
+            child: Text(
+              title,
+              style: const TextStyle(
+                fontSize: 18,
+              ),
             ),
           ),
         ),
