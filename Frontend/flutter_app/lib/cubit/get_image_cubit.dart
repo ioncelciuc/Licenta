@@ -14,14 +14,15 @@ class GetImageCubit extends Cubit<GetImageState> {
   getImage(String cardId) async {
     emit(GetImageLoading());
 
-    YuGiOhImage yuGiOhImage = HiveHelper.getImage(cardId);
-    if (yuGiOhImage.cardId != null) {
-      image = yuGiOhImage.imageUrl!;
-      if (!isClosed) {
-        emit(GetImageCompleted());
-      }
-      return;
-    }
+    //if you have local images, uncomment this
+    // YuGiOhImage yuGiOhImage = HiveHelper.getImage(cardId);
+    // if (yuGiOhImage.cardId != null) {
+    //   image = yuGiOhImage.imageUrl!;
+    //   if (!isClosed) {
+    //     emit(GetImageCompleted());
+    //   }
+    //   return;
+    // }
 
     Response response = await ImageHelper.getImage(cardId);
 
