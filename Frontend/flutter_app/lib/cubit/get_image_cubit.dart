@@ -8,11 +8,14 @@ part 'get_image_state.dart';
 
 class GetImageCubit extends Cubit<GetImageState> {
   late String image;
+  String? banlist;
 
   GetImageCubit() : super(GetImageInitial());
 
-  getImage(String cardId) async {
+  getImage(String cardId, String? banlist) async {
     emit(GetImageLoading());
+
+    this.banlist = banlist;
 
     //if you have local images, uncomment this
     // YuGiOhImage yuGiOhImage = HiveHelper.getImage(cardId);

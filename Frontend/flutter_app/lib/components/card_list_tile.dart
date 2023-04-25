@@ -37,7 +37,12 @@ class CardListTile extends StatelessWidget {
             height: 100,
             child: Row(
               children: [
-                ImageDisplay(cardId: card.cardId.toString()),
+                ImageDisplay(
+                  cardId: card.cardId.toString(),
+                  banlist: card.banlistInfo != null
+                      ? card.banlistInfo!.banTcg
+                      : null,
+                ),
                 // CachedNetworkImage(
                 //   imageUrl: card.cardImages![0].imageUrlSmall!,
                 //   placeholder: (context, url) {

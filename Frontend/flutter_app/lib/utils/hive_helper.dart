@@ -65,7 +65,8 @@ class HiveHelper {
   }
 
   static List<YuGiOhCard> getBannedCards() {
-    return Hive.box<YuGiOhCard>(cards).values.where((element) {
+    List<YuGiOhCard> bannedCards =
+        Hive.box<YuGiOhCard>(cards).values.where((element) {
       if (element.banlistInfo == null) {
         return false;
       }
@@ -74,6 +75,92 @@ class HiveHelper {
       }
       return true;
     }).toList();
+    bannedCards.sort((a, b) {
+      //banned, then limited, then semi-limited
+      if (a.banlistInfo!.banTcg == 'Banned' &&
+          b.banlistInfo!.banTcg != 'Banned') {
+        return -1;
+      }
+      if (a.banlistInfo!.banTcg != 'Banned' &&
+          b.banlistInfo!.banTcg == 'Banned') {
+        return 1;
+      }
+      if (a.banlistInfo!.banTcg == 'Limited' &&
+          b.banlistInfo!.banTcg != 'Limited') {
+        return -1;
+      }
+      if (a.banlistInfo!.banTcg != 'Limited' &&
+          b.banlistInfo!.banTcg == 'Limited') {
+        return 1;
+      }
+      //monsters, then spells, then traps
+      if (a.type!.contains('Monster') && !b.type!.contains('Monster')) {
+        return -1;
+      }
+      if (!a.type!.contains('Monster') && b.type!.contains('Monster')) {
+        return 1;
+      }
+      if (a.type!.contains('Spell') && !b.type!.contains('Spell')) {
+        return -1;
+      }
+      if (!a.type!.contains('Spell') && b.type!.contains('Spell')) {
+        return 1;
+      }
+      if (a.type!.contains('Monster') && b.type!.contains('Monster')) {
+        if (a.type!.contains('Normal') && !b.type!.contains('Normal')) {
+          return -1;
+        }
+        if (!a.type!.contains('Normal') && b.type!.contains('Normal')) {
+          return 1;
+        }
+
+        if (a.type!.contains('Pendulum') && !b.type!.contains('Pendulum')) {
+          return -1;
+        }
+        if (!a.type!.contains('Pendulum') && b.type!.contains('Pendulum')) {
+          return 1;
+        }
+
+        if (a.type!.contains('Effect Monster') &&
+            !b.type!.contains('Effect Monster')) {
+          return -1;
+        }
+        if (!a.type!.contains('Effect Monster') &&
+            b.type!.contains('Effect Monster')) {
+          return 1;
+        }
+
+        if (a.type!.contains('Fusion') && !b.type!.contains('Fusion')) {
+          return -1;
+        }
+        if (!a.type!.contains('Fusion') && b.type!.contains('Fusion')) {
+          return 1;
+        }
+
+        if (a.type!.contains('Synchro') && !b.type!.contains('Synchro')) {
+          return -1;
+        }
+        if (!a.type!.contains('Synchro') && b.type!.contains('Synchro')) {
+          return 1;
+        }
+
+        if (a.type!.contains('XYZ') && !b.type!.contains('XYZ')) {
+          return -1;
+        }
+        if (!a.type!.contains('XYZ') && b.type!.contains('XYZ')) {
+          return 1;
+        }
+
+        if (a.type!.contains('Link') && !b.type!.contains('Link')) {
+          return -1;
+        }
+        if (!a.type!.contains('Link') && b.type!.contains('Link')) {
+          return 1;
+        }
+      }
+      return a.name!.compareTo(b.name!);
+    });
+    return bannedCards;
   }
 
   static List<YuGiOhCard> getArchetypeCards(String archetype) {
