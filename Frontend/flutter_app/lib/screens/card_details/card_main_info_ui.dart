@@ -16,7 +16,9 @@ class CardMainInfoUi extends StatelessWidget {
         ? 'SPELL / ${card.race}'
         : (card.type!.contains('Trap')
             ? 'TRAP / ${card.race}'
-            : '${card.attribute!.toUpperCase()} / ${card.race} / ${(card.type!.contains('Monster') ? card.type!.substring(0, card.type!.lastIndexOf('Monster')) : card.type)}'));
+            : card.type!.contains('Skill')
+                ? 'SKILL / ${card.race!}'
+                : '${card.attribute!.toUpperCase()} / ${card.race} / ${(card.type!.contains('Monster') ? card.type!.substring(0, card.type!.lastIndexOf('Monster')) : card.type)}'));
     String stats = (card.attribute == null
         ? ''
         : (card.type!.contains('Link')

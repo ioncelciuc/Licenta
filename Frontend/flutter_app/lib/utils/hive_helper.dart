@@ -116,40 +116,50 @@ class HiveHelper {
           return 1;
         }
 
+        if ((a.type!.startsWith('Effect') && !b.type!.startsWith('Effect')) ||
+            (a.type!.startsWith('Flip') && !b.type!.startsWith('Flip')) ||
+            (a.type!.startsWith('Toon') && !b.type!.startsWith('Toon')) ||
+            (a.type!.startsWith('Spirit') && !b.type!.startsWith('Spirit')) ||
+            (a.type!.startsWith('Union') && !b.type!.startsWith('Union')) ||
+            (a.type!.startsWith('Gemini') && !b.type!.startsWith('Gemini')) ||
+            (a.type!.startsWith('Tuner') && !b.type!.startsWith('Tuner'))) {
+          return -1;
+        }
+        if ((!a.type!.startsWith('Effect') && b.type!.startsWith('Effect')) ||
+            (!a.type!.startsWith('Flip') && b.type!.startsWith('Flip')) ||
+            (!a.type!.startsWith('Toon') && b.type!.startsWith('Toon')) ||
+            (!a.type!.startsWith('Spirit') && b.type!.startsWith('Spirit')) ||
+            (!a.type!.startsWith('Union') && b.type!.startsWith('Union')) ||
+            (!a.type!.startsWith('Gemini') && b.type!.startsWith('Gemini')) ||
+            (!a.type!.startsWith('Tuner') && b.type!.startsWith('Tuner'))) {
+          return 1;
+        }
+
+        if (a.type!.startsWith('Fusion') && !b.type!.contains('Fusion')) {
+          return -1;
+        }
+        if (!a.type!.startsWith('Fusion') && b.type!.contains('Fusion')) {
+          return 1;
+        }
+
+        if (a.type!.startsWith('Synchro') && !b.type!.contains('Synchro')) {
+          return -1;
+        }
+        if (!a.type!.startsWith('Synchro') && b.type!.contains('Synchro')) {
+          return 1;
+        }
+
+        if (a.type!.startsWith('XYZ') && !b.type!.contains('XYZ')) {
+          return -1;
+        }
+        if (!a.type!.startsWith('XYZ') && b.type!.contains('XYZ')) {
+          return 1;
+        }
+
         if (a.type!.contains('Pendulum') && !b.type!.contains('Pendulum')) {
           return -1;
         }
         if (!a.type!.contains('Pendulum') && b.type!.contains('Pendulum')) {
-          return 1;
-        }
-
-        if (a.type!.contains('Effect Monster') &&
-            !b.type!.contains('Effect Monster')) {
-          return -1;
-        }
-        if (!a.type!.contains('Effect Monster') &&
-            b.type!.contains('Effect Monster')) {
-          return 1;
-        }
-
-        if (a.type!.contains('Fusion') && !b.type!.contains('Fusion')) {
-          return -1;
-        }
-        if (!a.type!.contains('Fusion') && b.type!.contains('Fusion')) {
-          return 1;
-        }
-
-        if (a.type!.contains('Synchro') && !b.type!.contains('Synchro')) {
-          return -1;
-        }
-        if (!a.type!.contains('Synchro') && b.type!.contains('Synchro')) {
-          return 1;
-        }
-
-        if (a.type!.contains('XYZ') && !b.type!.contains('XYZ')) {
-          return -1;
-        }
-        if (!a.type!.contains('XYZ') && b.type!.contains('XYZ')) {
           return 1;
         }
 
