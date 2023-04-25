@@ -24,7 +24,7 @@ class BrowseCardsUi extends StatelessWidget {
         yugiohCards = HiveHelper.getBannedCards();
         break;
       case CardListType.FAVOURITE_CARDS:
-        // TODO: Handle this case.
+        yugiohCards = HiveHelper.getFavourites();
         break;
       case CardListType.ARCHETYPE_CARDS:
         yugiohCards = HiveHelper.getArchetypeCards(searchParams!);

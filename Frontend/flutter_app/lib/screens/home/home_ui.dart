@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/models/drawer_item.dart';
 import 'package:flutter_app/screens/browse_database/browse_database_screen.dart';
+import 'package:flutter_app/screens/browse_favourites/browse_favourites_screen.dart';
 
 class HomeUi extends StatefulWidget {
   const HomeUi({super.key});
@@ -33,13 +34,17 @@ class _HomeUiState extends State<HomeUi> {
     switch (pos) {
       case 0:
         //DASHBOARD
-        return BrowseDatabaseScreen(homeScaffoldState: homeScaffoldState);
+        return BrowseDatabaseScreen(
+          homeScaffoldState: homeScaffoldState,
+        );
       case 1:
-        // return DatabasePage(homeScaffoldState);
-        return BrowseDatabaseScreen(homeScaffoldState: homeScaffoldState);
+        return BrowseDatabaseScreen(
+          homeScaffoldState: homeScaffoldState,
+        );
       case 2:
-        // return FavoritesPage(homeScaffoldState);
-        return Scaffold();
+        return BrowseFavouritesScreen(
+          homeScaffoldState: homeScaffoldState,
+        );
       case 3:
         // return CalculatorPage(homeScaffoldState);
         return Scaffold();

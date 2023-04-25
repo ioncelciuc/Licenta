@@ -1,4 +1,5 @@
 import 'package:flutter_app/models/archetype.dart';
+import 'package:flutter_app/models/favourite_card.dart';
 import 'package:flutter_app/models/yugioh_card.dart';
 import 'package:flutter_app/models/card_set.dart';
 import 'package:flutter_app/models/database_version.dart';
@@ -11,6 +12,7 @@ class HiveHelper {
   static const String archetypes = 'archetypes';
   static const String cards = 'cards';
   static const String images = 'images';
+  static const String favourites = 'favourites';
 
   static DatabaseVersion getDatabaseVersion() {
     return Hive.box<DatabaseVersion>(databaseVersion).values.toList()[0];
@@ -192,5 +194,37 @@ class HiveHelper {
     return Hive.box<YuGiOhImage>(images).values.firstWhere(
         (image) => image.cardId == cardId,
         orElse: () => YuGiOhImage());
+  }
+
+  static Future<void> insertFavourite(int cardId) async {
+    await Hive.box<FavouriteCard>(favourites).add(FavouriteCard(cardId));
+  }
+
+  static Future<void> deleteFavourite(int cardId) async {
+    final box = Hive.box<FavouriteCard>(favourites);
+    final keysToDelete =
+        box.keys.where((key) => box.get(key)!.cardId == cardId).toList();
+    await box.deleteAll(keysToDelete);
+  }
+
+  static List<YuGiOhCard> getFavourites() {
+    List<FavouriteCard> favouriteCards =
+        Hive.box<FavouriteCard>(favourites).values.toList();
+    List<YuGiOhCard> yugiohCards = [];
+    for (FavouriteCard favouriteCard in favouriteCards) {
+      yugiohCards.add(Hive.box<YuGiOhCard>(cards)
+          .values
+          .firstWhere((element) => element.cardId == favouriteCard.cardId));
+    }
+    return yugiohCards;
+  }
+
+  static bool isFavourite(int cardId) {
+    int id = Hive.box<FavouriteCard>(favourites)
+        .values
+        .firstWhere((element) => element.cardId == cardId,
+            orElse: () => FavouriteCard(-1))
+        .cardId;
+    return id != -1;
   }
 }
