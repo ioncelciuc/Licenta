@@ -160,7 +160,7 @@ exports.get_card_images = async function (req, res, next) {
 
                 try {
                     image_small = await getImageInBase64(
-                        '/images/cards/' + cardList[i]['card_images'][j]['id'] + '.jpg'
+                        '/images/cards_small/' + cardList[i]['card_images'][j]['id'] + '.jpg'
                     );
                 } catch (e) {
                     console.log("error on image small with id " + imageId + ' :' + e);
@@ -168,7 +168,7 @@ exports.get_card_images = async function (req, res, next) {
 
                 try {
                     image_cropped = await getImageInBase64(
-                        '/images/cards/' + cardList[i]['card_images'][j]['id'] + '.jpg'
+                        '/images/cards_cropped/' + cardList[i]['card_images'][j]['id'] + '.jpg'
                     );
                 } catch (e) {
                     console.log("error on image cropped with id " + imageId + ' :' + e);
