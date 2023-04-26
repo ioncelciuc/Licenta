@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter_app/network/helper/image_helper.dart';
 import 'package:flutter_app/network/response/response.dart';
+import 'package:flutter_app/utils/image_type.dart';
 
 part 'get_image_state.dart';
 
@@ -10,7 +11,7 @@ class GetImageCubit extends Cubit<GetImageState> {
 
   GetImageCubit() : super(GetImageInitial());
 
-  getImage(String cardId, String? banlist) async {
+  getImage(String cardId, String? banlist, ImageType imageType) async {
     emit(GetImageLoading());
 
     this.banlist = banlist;
@@ -24,8 +25,14 @@ class GetImageCubit extends Cubit<GetImageState> {
     //   }
     //   return;
     // }
-
-    Response response = await ImageHelper.getImage(cardId);
+    Response response;
+    if (imageType == ImageType.CARD) {
+      response = await ImageHelper.getImage(cardId);
+    } else if (imageType == ImageType.CARD_SMALL) {
+      response = await ImageHelper.getImageSmall(cardId);
+    } else {
+      response = await ImageHelper.getArtwork(cardId);
+    }
 
     if (response.success) {
       image = response.obj as String;

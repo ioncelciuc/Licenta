@@ -23,4 +23,41 @@ class ImageHelper {
       );
     }
   }
+
+  static Future<Response> getImageSmall(String cardId) async {
+    try {
+      String path = '${DotEnvPaths().getImageSmall()}/$cardId';
+      http.Response res = await http.get(Uri.parse(path));
+      final jsonList = jsonDecode(res.body);
+      final json = jsonList[0];
+      final image = json['image_url_small'];
+      return Response(success: true, obj: image);
+    } catch (e) {
+      String message = "Error on download cards!";
+      log(message, error: e);
+      return Response(
+        success: false,
+        message: message,
+      );
+    }
+  }
+
+  static Future<Response> getArtwork(String cardId) async {
+    try {
+      String path = '${DotEnvPaths().getImageCropped()}/$cardId';
+      print(path);
+      http.Response res = await http.get(Uri.parse(path));
+      final jsonList = jsonDecode(res.body);
+      final json = jsonList[0];
+      final image = json['image_url_cropped'];
+      return Response(success: true, obj: image);
+    } catch (e) {
+      String message = "Error on download cards!";
+      log(message, error: e);
+      return Response(
+        success: false,
+        message: message,
+      );
+    }
+  }
 }

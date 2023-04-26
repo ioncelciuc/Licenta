@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/components/image_display.dart';
 import 'package:flutter_app/models/drawer_item.dart';
 import 'package:flutter_app/screens/browse_database/browse_database_screen.dart';
 import 'package:flutter_app/screens/browse_favourites/browse_favourites_screen.dart';
+import 'package:flutter_app/utils/image_type.dart';
 
 class HomeUi extends StatefulWidget {
   const HomeUi({super.key});
@@ -70,35 +72,56 @@ class _HomeUiState extends State<HomeUi> {
 
     return Scaffold(
       key: homeScaffoldState,
-      drawer: Drawer(
-        child: ListView(
-          padding: const EdgeInsets.all(0.0),
-          children: [
-            UserAccountsDrawerHeader(
-              accountName: Text('test'),
-              accountEmail: null,
-            ),
-            Column(children: drawerMainOptions),
-            const Divider(
-              thickness: 1,
-            ),
-            ListTile(
-              leading: Icon(Icons.settings),
-              title: Text('Settings'),
-              onTap: () {
-                // Routers.showSettingsPage(context);
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.logout),
-              title: Text('Logout'),
-              onTap: () async {
-                // Navigator.of(context).pop();
-                // await FirebaseHelper.logOut();
-                // Routers.showLoginPage(context);
-              },
-            ),
-          ],
+      drawer: SizedBox(
+        width: 300,
+        child: Drawer(
+          child: ListView(
+            padding: const EdgeInsets.all(0.0),
+            children: [
+              Container(
+                height: 300,
+                width: 300,
+                color: Theme.of(context).primaryColor,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: 300,
+                      child: ImageDisplay(
+                        cardId: '95440946',
+                        imageType: ImageType.ARTWORK,
+                      ),
+                    ),
+                    // SizedBox(height: 32),
+                    // Text(
+                    //   'ioncelciuc',
+                    //   style: TextStyle(fontSize: 20),
+                    // ),
+                  ],
+                ),
+              ),
+              Column(children: drawerMainOptions),
+              const Divider(
+                thickness: 1,
+              ),
+              ListTile(
+                leading: const Icon(Icons.settings),
+                title: const Text('Settings'),
+                onTap: () {
+                  // Routers.showSettingsPage(context);
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.logout),
+                title: Text('Logout'),
+                onTap: () async {
+                  // Navigator.of(context).pop();
+                  // await FirebaseHelper.logOut();
+                  // Routers.showLoginPage(context);
+                },
+              ),
+            ],
+          ),
         ),
       ),
       body: getDrawerPage(selectedDrawerIndex, homeScaffoldState),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/components/image_display.dart';
 import 'package:flutter_app/models/yugioh_card.dart';
 import 'package:flutter_app/utils/app_router.dart';
+import 'package:flutter_app/utils/image_type.dart';
 
 class CardListTile extends StatelessWidget {
   final YuGiOhCard card;
@@ -40,11 +41,45 @@ class CardListTile extends StatelessWidget {
             height: 100,
             child: Row(
               children: [
-                ImageDisplay(
-                  cardId: card.cardId.toString(),
-                  banlist: card.banlistInfo != null
-                      ? card.banlistInfo!.banTcg
-                      : null,
+                Stack(
+                  alignment: Alignment.bottomRight,
+                  children: [
+                    ImageDisplay(
+                      cardId: card.cardId.toString(),
+                      banlist: card.banlistInfo != null
+                          ? card.banlistInfo!.banTcg
+                          : null,
+                      imageType: ImageType.CARD_SMALL,
+                    ),
+                    card.banlistInfo != null
+                        ? card.banlistInfo!.banTcg == 'Banned'
+                            ? Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.black,
+                                  borderRadius: BorderRadius.circular(30),
+                                ),
+                                child: const Icon(
+                                  Icons.block,
+                                  color: Colors.red,
+                                ),
+                              )
+                            : card.banlistInfo!.banTcg == 'Limited'
+                                ? Container(
+                                    color: Colors.black,
+                                    child: const Icon(
+                                      Icons.looks_one,
+                                      color: Colors.red,
+                                    ),
+                                  )
+                                : Container(
+                                    color: Colors.black,
+                                    child: const Icon(
+                                      Icons.looks_two,
+                                      color: Colors.red,
+                                    ),
+                                  )
+                        : Container(),
+                  ],
                 ),
                 // CachedNetworkImage(
                 //   imageUrl: card.cardImages![0].imageUrlSmall!,
