@@ -13,7 +13,6 @@ class CardListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(card.toJson());
     String generalInfo = (card.type!.contains('Spell')
         ? 'SPELL / ${card.race}'
         : (card.type!.contains('Trap')

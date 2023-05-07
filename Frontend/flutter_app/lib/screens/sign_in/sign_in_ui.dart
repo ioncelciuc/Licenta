@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/custom_button.dart';
 import 'package:flutter_app/components/custom_text_field.dart';
+import 'package:flutter_app/cubit/auth_cubit.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SignInUi extends StatefulWidget {
   const SignInUi({super.key});
@@ -54,7 +56,12 @@ class _SignInUiState extends State<SignInUi> {
           const SizedBox(height: 64),
           CustomButton(
             title: 'Sign In',
-            onPressed: () {},
+            onPressed: () {
+              BlocProvider.of<AuthCubit>(context).signIn(
+                userController.text,
+                passwordController.text,
+              );
+            },
           ),
         ],
       ),

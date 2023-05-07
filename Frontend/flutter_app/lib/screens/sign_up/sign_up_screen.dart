@@ -4,17 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/components/loading_screen_ui.dart';
 import 'package:flutter_app/components/snackbar_handler.dart';
 import 'package:flutter_app/cubit/auth_cubit.dart';
-import 'package:flutter_app/screens/sign_in/sign_in_ui.dart';
+import 'package:flutter_app/screens/sign_up/sign_up_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class SignInScreen extends StatefulWidget {
-  const SignInScreen({super.key});
+class SignUpScreen extends StatelessWidget {
+  const SignUpScreen({super.key});
 
-  @override
-  State<SignInScreen> createState() => _SignInScreenState();
-}
-
-class _SignInScreenState extends State<SignInScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -37,14 +32,13 @@ class _SignInScreenState extends State<SignInScreen> {
               message: "Account created successfully",
             );
             Navigator.of(context).pop();
-            Navigator.of(context).pop();
           }
         },
         builder: (context, state) {
           if (state is AuthLoading) {
             return const LoadingScreenUi();
           }
-          return const SignInUi();
+          return const SignUpUi();
         },
       ),
     );

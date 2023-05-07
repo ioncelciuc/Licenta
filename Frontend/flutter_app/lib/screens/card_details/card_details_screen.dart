@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/app_bar_card_details.dart';
 import 'package:flutter_app/cubit/favourite_cubit.dart';

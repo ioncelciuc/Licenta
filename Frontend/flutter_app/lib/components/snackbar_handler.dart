@@ -20,13 +20,17 @@ class SnackbarHandler {
         backgroundColor: isError ? Colors.red : Colors.green,
         content: Row(
           children: [
-            Icon(isError ? Icons.error : Icons.check),
+            Icon(
+              isError ? Icons.error : Icons.check,
+              color: Colors.white,
+            ),
             const SizedBox(width: 16),
             Flexible(
               child: Text(
                 message,
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
+                  color: Colors.white,
                 ),
               ),
             )

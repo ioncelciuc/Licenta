@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/models/yugioh_card.dart';
 import 'package:flutter_app/screens/browse_cards/browse_cards_screen.dart';
 import 'package:flutter_app/screens/card_details/card_details_screen.dart';
+import 'package:flutter_app/screens/sign_in/sign_in_screen.dart';
+import 'package:flutter_app/screens/sign_up/sign_up_screen.dart';
 import 'package:flutter_app/utils/card_list_type.dart';
 
 class AppRouter {
@@ -27,6 +29,22 @@ class AppRouter {
           cardListType: cardListType,
           searchParams: searchParams,
         ),
+      ),
+    );
+  }
+
+  static void openSignInPage(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const SignInScreen(),
+      ),
+    );
+  }
+
+  static void openSignUpPage(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const SignUpScreen(),
       ),
     );
   }

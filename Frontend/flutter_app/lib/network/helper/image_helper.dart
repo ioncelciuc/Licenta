@@ -45,7 +45,7 @@ class ImageHelper {
   static Future<Response> getArtwork(String cardId) async {
     try {
       String path = '${DotEnvPaths().getImageCropped()}/$cardId';
-      print(path);
+      log(path);
       http.Response res = await http.get(Uri.parse(path));
       final jsonList = jsonDecode(res.body);
       final json = jsonList[0];

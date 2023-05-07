@@ -11,6 +11,7 @@ class SharedPrefsHelper {
   late SharedPreferences _sharedPreferences;
 
   static const String _IS_DATA_DOWNLOADED = 'IS_DATA_DOWNLOADED';
+  static const String _AUTH_TOKEN = 'AUTH_TOKEN';
 
   Future<void> initializeSharedPreferences() async {
     _sharedPreferences = await SharedPreferences.getInstance();
@@ -22,5 +23,13 @@ class SharedPrefsHelper {
 
   Future<void> setIsDataDownloaded(bool isTheDataDownloaded) async {
     await _sharedPreferences.setBool(_IS_DATA_DOWNLOADED, isTheDataDownloaded);
+  }
+
+  String getAuthToken() {
+    return _sharedPreferences.getString(_AUTH_TOKEN) ?? '';
+  }
+
+  Future<void> setAuthToken(String authToken) async {
+    await _sharedPreferences.setString(_AUTH_TOKEN, authToken);
   }
 }
