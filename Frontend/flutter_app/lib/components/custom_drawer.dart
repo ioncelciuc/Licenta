@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/custom_drawer_header.dart';
+import 'package:flutter_app/utils/app_router.dart';
 import 'package:flutter_app/utils/shared_prefs_helper.dart';
 import 'package:flutter_app/utils/token_helper.dart';
 
@@ -34,13 +35,15 @@ class _CustomDrawerState extends State<CustomDrawer> {
             const Divider(
               thickness: 1,
             ),
-            ListTile(
-              leading: const Icon(Icons.settings),
-              title: const Text('Settings'),
-              onTap: () {
-                // Routers.showSettingsPage(context);
-              },
-            ),
+            TokenHelper.tokenExistsAndIsValid()
+                ? ListTile(
+                    leading: const Icon(Icons.card_travel),
+                    title: const Text('Decks'),
+                    onTap: () {
+                      AppRouter.openDecksPage(context);
+                    },
+                  )
+                : const SizedBox(),
             TokenHelper.tokenExistsAndIsValid()
                 ? ListTile(
                     leading: const Icon(Icons.logout),

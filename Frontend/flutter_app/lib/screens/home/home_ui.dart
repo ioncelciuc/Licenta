@@ -3,6 +3,7 @@ import 'package:flutter_app/components/custom_drawer.dart';
 import 'package:flutter_app/models/drawer_item.dart';
 import 'package:flutter_app/screens/browse_database/browse_database_screen.dart';
 import 'package:flutter_app/screens/browse_favourites/browse_favourites_screen.dart';
+import 'package:flutter_app/screens/deck/deck_screen.dart';
 
 class HomeUi extends StatefulWidget {
   const HomeUi({super.key});
@@ -19,7 +20,6 @@ class _HomeUiState extends State<HomeUi> {
     DrawerItem('Database', const Icon(Icons.list_alt)),
     DrawerItem('Favourites', const Icon(Icons.favorite)),
     DrawerItem('Calculator', const Icon(Icons.calculate)),
-    DrawerItem('Decks', const Icon(Icons.card_travel)),
   ];
 
   selectDrawerPage(int index) {
@@ -35,22 +35,13 @@ class _HomeUiState extends State<HomeUi> {
     switch (pos) {
       case 0:
         //DASHBOARD
-        return BrowseDatabaseScreen(
-          homeScaffoldState: homeScaffoldState,
-        );
+        return BrowseDatabaseScreen(homeScaffoldState: homeScaffoldState);
       case 1:
-        return BrowseDatabaseScreen(
-          homeScaffoldState: homeScaffoldState,
-        );
+        return BrowseDatabaseScreen(homeScaffoldState: homeScaffoldState);
       case 2:
-        return BrowseFavouritesScreen(
-          homeScaffoldState: homeScaffoldState,
-        );
+        return BrowseFavouritesScreen(homeScaffoldState: homeScaffoldState);
       case 3:
         // return CalculatorPage(homeScaffoldState);
-        return Scaffold();
-      case 4:
-        // return DecksPage(homeScaffoldState);
         return Scaffold();
     }
   }

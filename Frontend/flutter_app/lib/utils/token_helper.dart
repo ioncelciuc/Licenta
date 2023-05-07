@@ -2,6 +2,10 @@ import 'package:flutter_app/utils/shared_prefs_helper.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 
 class TokenHelper {
+  static String getToken() {
+    return SharedPrefsHelper.instance.getAuthToken();
+  }
+
   static bool tokenExistsAndIsValid() {
     if (SharedPrefsHelper.instance.getAuthToken().isNotEmpty) {
       if (getExpirationDate().isAfter(DateTime.now())) {

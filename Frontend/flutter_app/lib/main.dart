@@ -1,5 +1,6 @@
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/cubit/decks_cubit.dart';
 import 'package:flutter_app/cubit/favourite_cubit.dart';
 import 'package:flutter_app/screens/initial/initial_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,6 +10,7 @@ void main() {
     MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => FavouriteCubit()),
+        BlocProvider(create: (context) => DecksCubit()),
       ],
       child: const MyApp(),
     ),
