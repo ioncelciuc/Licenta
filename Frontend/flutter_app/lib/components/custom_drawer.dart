@@ -44,6 +44,13 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     },
                   )
                 : const SizedBox(),
+            ListTile(
+              leading: const Icon(Icons.info),
+              title: const Text('About'),
+              onTap: () {
+                AppRouter.openAboutPage(context);
+              },
+            ),
             TokenHelper.tokenExistsAndIsValid()
                 ? ListTile(
                     leading: const Icon(Icons.logout),
