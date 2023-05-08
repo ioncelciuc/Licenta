@@ -26,9 +26,32 @@ class DeckListTile extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          subtitle: Text(
-            'Main: ${deck.mainDeckCount}   Extra: ${deck.extraDeckCount}   Side: ${deck.sideDeckCount}',
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'Main: ${deck.mainDeckCount}   Extra: ${deck.extraDeckCount}   Side: ${deck.sideDeckCount}',
+              ),
+            ],
           ),
+          trailing: deck.mainDeckCount! >= 40
+              ? const SizedBox()
+              : const Tooltip(
+                  message:
+                      'Deck will be available for public only if main deck is at least 40 cards',
+                  triggerMode: TooltipTriggerMode.tap,
+                  showDuration: Duration(seconds: 8),
+                  decoration: BoxDecoration(
+                    color: Colors.red,
+                  ),
+                  margin: EdgeInsets.symmetric(horizontal: 16),
+                  child: Icon(
+                    Icons.info,
+                    size: 28,
+                    color: Colors.red,
+                  ),
+                ),
         ),
       ),
     );

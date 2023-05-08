@@ -85,11 +85,11 @@ class _DeckEditUiState extends State<DeckEditUi> {
   }
 
   saveDeck() {
-    if (main.length < 40 || main.length > 60) {
+    if (main.length > 60) {
       SnackbarHandler(
         context: context,
         isError: true,
-        message: 'Main deck should have between 40 and 60 cards',
+        message: 'Main deck should have a maximum of 60 cards.',
       );
       return;
     }
