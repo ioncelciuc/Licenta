@@ -3,6 +3,7 @@ import 'package:flutter_app/components/custom_drawer.dart';
 import 'package:flutter_app/models/drawer_item.dart';
 import 'package:flutter_app/screens/browse_database/browse_database_screen.dart';
 import 'package:flutter_app/screens/browse_favourites/browse_favourites_screen.dart';
+import 'package:flutter_app/screens/calculator/calculator_screen.dart';
 import 'package:flutter_app/screens/dashboard/dashboard_screen.dart';
 
 class HomeUi extends StatefulWidget {
@@ -40,8 +41,7 @@ class _HomeUiState extends State<HomeUi> {
       case 2:
         return BrowseFavouritesScreen(homeScaffoldState: homeScaffoldState);
       case 3:
-        // return CalculatorPage(homeScaffoldState);
-        return Scaffold();
+        return CalculatorScreen(homeScaffoldState: homeScaffoldState);
     }
   }
 

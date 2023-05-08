@@ -8,12 +8,9 @@ class AboutUi extends StatefulWidget {
 }
 
 class _AboutUiState extends State<AboutUi> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey,
       appBar: AppBar(
         title: const Text('About'),
         centerTitle: true,
