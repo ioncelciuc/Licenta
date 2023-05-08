@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_app/screens/dashboard/deck_search_screen.dart';
-import 'package:flutter_app/screens/deck/deck_screen.dart';
 
 class DeckSearchDelegate extends SearchDelegate<String> {
   @override

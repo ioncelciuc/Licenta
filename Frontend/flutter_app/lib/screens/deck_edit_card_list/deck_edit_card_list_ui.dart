@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/components/card_list_tile.dart';
-import 'package:flutter_app/components/custom_text_field.dart';
 import 'package:flutter_app/models/yugioh_card.dart';
 import 'package:flutter_app/utils/card_list_type.dart';
 import 'package:flutter_app/utils/card_search_delegate.dart';

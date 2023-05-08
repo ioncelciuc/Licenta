@@ -1,3 +1,5 @@
+// ignore_for_file: overridden_fields
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -9,6 +11,7 @@ class ImageDisplay extends StatelessWidget {
   final String cardId;
   final String? banlist;
   final ImageType imageType;
+  @override
   final Key key;
 
   const ImageDisplay({

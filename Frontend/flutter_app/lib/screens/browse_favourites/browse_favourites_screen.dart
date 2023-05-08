@@ -57,7 +57,7 @@ class BrowseFavouritesScreen extends StatelessWidget {
             ),
           );
         }
-        return Scaffold();
+        return const Scaffold();
       },
     );
   }

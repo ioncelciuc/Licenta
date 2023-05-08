@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/app_bar_drawer.dart';
 import 'package:flutter_app/utils/deck_search_delegate.dart';
-import 'package:flutter_app/utils/token_helper.dart';
 
 class DashboardUi extends StatelessWidget {
   final GlobalKey<ScaffoldState> homeScaffoldState;
@@ -28,7 +27,7 @@ class DashboardUi extends StatelessWidget {
       ),
       body: ListView(
         padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 32),
-        children: [
+        children: const [
           Text(
             'Welcome, Duelist!',
             style: TextStyle(

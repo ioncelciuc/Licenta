@@ -5,6 +5,7 @@ import 'package:flutter_app/screens/browse_cards/browse_cards_screen.dart';
 import 'package:flutter_app/screens/card_details/card_details_screen.dart';
 import 'package:flutter_app/screens/deck/deck_screen.dart';
 import 'package:flutter_app/screens/deck_edit/deck_edit_screen.dart';
+import 'package:flutter_app/screens/deck_edit/starting_hand_ui.dart';
 import 'package:flutter_app/screens/sign_in/sign_in_screen.dart';
 import 'package:flutter_app/screens/sign_up/sign_up_screen.dart';
 import 'package:flutter_app/utils/card_list_type.dart';
@@ -75,6 +76,17 @@ class AppRouter {
           deck: deck,
           isEditable: isEditable,
         ),
+      ),
+    );
+  }
+
+  static void openStartingHandPage(
+    BuildContext context,
+    List<YuGiOhCard> mainDeck,
+  ) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => StartingHandUi(main: mainDeck),
       ),
     );
   }

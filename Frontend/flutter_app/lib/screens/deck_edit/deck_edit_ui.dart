@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/custom_button.dart';
 import 'package:flutter_app/components/image_display.dart';
@@ -10,8 +8,8 @@ import 'package:flutter_app/models/deck.dart';
 import 'package:flutter_app/models/deck_card.dart';
 import 'package:flutter_app/models/yugioh_card.dart';
 import 'package:flutter_app/screens/card_details/card_details_screen.dart';
-import 'package:flutter_app/screens/deck_edit/random_cards_ui.dart';
 import 'package:flutter_app/screens/deck_edit_card_list/deck_edit_card_list_ui.dart';
+import 'package:flutter_app/utils/app_router.dart';
 import 'package:flutter_app/utils/hive_helper.dart';
 import 'package:flutter_app/utils/image_type.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -131,11 +129,7 @@ class _DeckEditUiState extends State<DeckEditUi> {
               ? Container()
               : IconButton(
                   onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => RandomCardsUi(main: main),
-                      ),
-                    );
+                    AppRouter.openStartingHandPage(context, main);
                   },
                   icon: const Icon(Icons.shuffle_rounded),
                 ),
