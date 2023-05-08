@@ -10,6 +10,10 @@ class DecksCubit extends Cubit<DecksState> {
 
   DecksCubit() : super(DecksInitial());
 
+  emitInitialState() {
+    emit(DecksInitial());
+  }
+
   getDecks() async {
     emit(DecksLoading());
 
@@ -31,6 +35,19 @@ class DecksCubit extends Cubit<DecksState> {
 
     if (response.success) {
       emit(DecksInitial()); //to get the newly created deck
+      return;
+    }
+
+    emit(DecksFailed(response));
+  }
+
+  deleteDeck(Deck deck) async {
+    emit(DecksLoading());
+
+    Response response = await DecksHelper.deleteDeckAndContents(deck);
+
+    if (response.success) {
+      emit(DecksInitial());
       return;
     }
 

@@ -9,13 +9,14 @@ class ImageDisplay extends StatelessWidget {
   final String cardId;
   final String? banlist;
   final ImageType imageType;
+  final Key key;
 
   const ImageDisplay({
-    super.key,
+    required this.key,
     required this.cardId,
     this.banlist,
     this.imageType = ImageType.CARD,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -30,15 +31,28 @@ class ImageDisplay extends StatelessWidget {
               banlist,
               imageType,
             );
-            return Image.asset('assets/card_back.png');
+            return Image.asset(
+              'assets/card_back.png',
+              key: key,
+            );
           }
           if (state is GetImageLoading) {
-            return Image.asset('assets/card_back.png');
+            return Image.asset(
+              'assets/card_back.png',
+              key: key,
+            );
+          }
+          if (state is GetImageFailed) {
+            return Image.asset(
+              'assets/card_back.png',
+              key: key,
+            );
           }
           return Image.memory(
             base64Decode(
               BlocProvider.of<GetImageCubit>(context).image,
             ),
+            key: key,
           );
         },
       ),

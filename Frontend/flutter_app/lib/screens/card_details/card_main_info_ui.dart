@@ -38,6 +38,7 @@ class CardMainInfoUi extends StatelessWidget {
               child: Column(
                 children: [
                   ImageDisplay(
+                    key: UniqueKey(),
                     cardId: card.cardId.toString(),
                   ),
                   const SizedBox(height: 12),

@@ -6,9 +6,12 @@ import 'package:flutter_app/utils/image_type.dart';
 
 class CardListTile extends StatelessWidget {
   final YuGiOhCard card;
+  final bool isFromEditDeck;
+
   const CardListTile({
     super.key,
     required this.card,
+    this.isFromEditDeck = false,
   });
 
   @override
@@ -32,7 +35,11 @@ class CardListTile extends StatelessWidget {
       elevation: 5,
       child: InkWell(
         onTap: () {
-          AppRouter.openCardDetailsPage(context, card);
+          AppRouter.openCardDetailsPage(
+            context,
+            card,
+            isDeckEdit: isFromEditDeck,
+          );
         },
         child: Padding(
           padding: const EdgeInsets.all(6.0),
@@ -40,56 +47,7 @@ class CardListTile extends StatelessWidget {
             height: 100,
             child: Row(
               children: [
-                Stack(
-                  alignment: Alignment.bottomRight,
-                  children: [
-                    ImageDisplay(
-                      cardId: card.cardId.toString(),
-                      banlist: card.banlistInfo != null
-                          ? card.banlistInfo!.banTcg
-                          : null,
-                      imageType: ImageType.CARD_SMALL,
-                    ),
-                    card.banlistInfo != null
-                        ? card.banlistInfo!.banTcg == 'Banned'
-                            ? Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.black,
-                                  borderRadius: BorderRadius.circular(30),
-                                ),
-                                child: const Icon(
-                                  Icons.block,
-                                  color: Colors.red,
-                                ),
-                              )
-                            : card.banlistInfo!.banTcg == 'Limited'
-                                ? Container(
-                                    color: Colors.black,
-                                    child: const Icon(
-                                      Icons.looks_one,
-                                      color: Colors.red,
-                                    ),
-                                  )
-                                : Container(
-                                    color: Colors.black,
-                                    child: const Icon(
-                                      Icons.looks_two,
-                                      color: Colors.red,
-                                    ),
-                                  )
-                        : Container(),
-                  ],
-                ),
-                // CachedNetworkImage(
-                //   imageUrl: card.cardImages![0].imageUrlSmall!,
-                //   placeholder: (context, url) {
-                //     return Image.asset('assets/card_back.png');
-                //   },
-                //   errorWidget: (context, url, error) {
-                //     return Image.asset('assets/card_back.png');
-                //   },
-                // ),
-                const SizedBox(width: 16),
+                imageBuilder(),
                 Expanded(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -114,6 +72,57 @@ class CardListTile extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Row imageBuilder() {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Stack(
+          alignment: Alignment.bottomRight,
+          children: [
+            ImageDisplay(
+              key: UniqueKey(),
+              cardId: card.cardId.toString(),
+              banlist:
+                  card.banlistInfo != null ? card.banlistInfo!.banTcg : null,
+              imageType: ImageType.CARD_SMALL,
+            ),
+            card.banlistInfo != null
+                ? card.banlistInfo!.banTcg == 'Banned'
+                    ? Container(
+                        decoration: BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child: const Icon(
+                          Icons.block,
+                          color: Colors.red,
+                        ),
+                      )
+                    : card.banlistInfo!.banTcg == 'Limited'
+                        ? Container(
+                            color: Colors.black,
+                            child: const Icon(
+                              Icons.looks_one,
+                              color: Colors.red,
+                            ),
+                          )
+                        : card.banlistInfo!.banTcg == 'Semi-Limited'
+                            ? Container(
+                                color: Colors.black,
+                                child: const Icon(
+                                  Icons.looks_two,
+                                  color: Colors.red,
+                                ),
+                              )
+                            : Container()
+                : Container()
+          ],
+        ),
+        const SizedBox(width: 16),
+      ],
     );
   }
 }

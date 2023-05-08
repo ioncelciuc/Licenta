@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/models/deck.dart';
+import 'package:flutter_app/utils/app_router.dart';
 
 class DeckListTile extends StatelessWidget {
   final Deck deck;
@@ -14,7 +15,9 @@ class DeckListTile extends StatelessWidget {
     return Card(
       elevation: 10,
       child: InkWell(
-        onTap: () {},
+        onTap: () {
+          AppRouter.openDeckEditPage(context, deck);
+        },
         child: ListTile(
           enableFeedback: true,
           title: Text(

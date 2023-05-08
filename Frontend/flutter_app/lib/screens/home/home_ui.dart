@@ -3,7 +3,6 @@ import 'package:flutter_app/components/custom_drawer.dart';
 import 'package:flutter_app/models/drawer_item.dart';
 import 'package:flutter_app/screens/browse_database/browse_database_screen.dart';
 import 'package:flutter_app/screens/browse_favourites/browse_favourites_screen.dart';
-import 'package:flutter_app/screens/deck/deck_screen.dart';
 
 class HomeUi extends StatefulWidget {
   const HomeUi({super.key});

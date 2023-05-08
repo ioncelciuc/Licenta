@@ -29,15 +29,6 @@ class BrowseCardsUi extends StatelessWidget {
       case CardListType.ARCHETYPE_CARDS:
         yugiohCards = HiveHelper.getArchetypeCards(searchParams!);
         break;
-      case CardListType.MAIN_DECK_CARDS:
-        // TODO: Handle this case.
-        break;
-      case CardListType.EXTRA_DECK_CARDS:
-        // TODO: Handle this case.
-        break;
-      case CardListType.SIDE_DECK_CARDS:
-        // TODO: Handle this case.
-        break;
     }
     if (searchParams != null) {
       if (cardListType == CardListType.ARCHETYPE_CARDS) {

@@ -10,6 +10,7 @@ class DeckScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    BlocProvider.of<DecksCubit>(context).emitInitialState();
     return BlocConsumer<DecksCubit, DecksState>(
       listener: (context, state) {
         if (state is DecksFailed) {
@@ -28,6 +29,7 @@ class DeckScreen extends StatelessWidget {
         if (state is DecksLoading) {
           return const LoadingScreenUi();
         }
+        //check for failed ui
         return const DeckUi();
       },
     );

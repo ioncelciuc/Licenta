@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_app/utils/shared_prefs_helper.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 
@@ -8,8 +10,16 @@ class TokenHelper {
 
   static bool tokenExistsAndIsValid() {
     if (SharedPrefsHelper.instance.getAuthToken().isNotEmpty) {
-      if (getExpirationDate().isAfter(DateTime.now())) {
-        return true;
+      log('CURRENT DATE: ${DateTime.now()}');
+      log('TOKEN EXPIRATION DATE: ${getExpirationDate()}');
+      bool isExpired;
+      try {
+        isExpired =
+            JwtDecoder.isExpired(SharedPrefsHelper.instance.getAuthToken());
+        return !isExpired;
+      } catch (e) {
+        log('TOKEN ERROR: $e');
+        return false;
       }
     }
     return false;
@@ -29,10 +39,6 @@ class TokenHelper {
 
   static DateTime getExpirationDate() {
     String token = SharedPrefsHelper.instance.getAuthToken();
-    Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
-    DateTime expirationTime = DateTime.fromMillisecondsSinceEpoch(
-      decodedToken['exp'] * 1000,
-    );
-    return expirationTime;
+    return JwtDecoder.getExpirationDate(token);
   }
 }
