@@ -39,7 +39,6 @@ class _BrowseDatabaseScreenState extends State<BrowseDatabaseScreen>
     if (tabController.indexIsChanging) {
       setState(() {
         currentIndex = tabController.index;
-        print(currentIndex);
       });
     }
   }

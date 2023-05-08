@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/components/card_list_tile.dart';
 import 'package:flutter_app/components/custom_text_field.dart';
 import 'package:flutter_app/models/yugioh_card.dart';
+import 'package:flutter_app/utils/card_list_type.dart';
+import 'package:flutter_app/utils/card_search_delegate.dart';
 import 'package:flutter_app/utils/hive_helper.dart';
 
 class DeckEditCardListUi extends StatefulWidget {
@@ -24,9 +26,34 @@ class _DeckEditCardListUiState extends State<DeckEditCardListUi> {
       appBar: AppBar(
         title: const Text('Add cards to deck'),
         centerTitle: true,
+        actions: [
+          IconButton(
+            onPressed: () {
+              showSearch(
+                context: context,
+                delegate: CardSearchDelegate(
+                  listType: CardListType.EDIT_DECK_CARDS,
+                ),
+              );
+            },
+            icon: const Icon(Icons.search),
+          ),
+        ],
       ),
       body: Column(
-        children: [
+        children: const [
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 32, horizontal: 32),
+            child: Text(
+              'Search cards to add to the main deck, extra deck or side deck!',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          )
+          /*
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
             child: Row(
@@ -68,6 +95,7 @@ class _DeckEditCardListUiState extends State<DeckEditCardListUi> {
               ),
             ),
           ),
+          */
         ],
       ),
     );

@@ -20,6 +20,9 @@ class BrowseCardsUi extends StatelessWidget {
       case CardListType.ALL_CARDS:
         yugiohCards = HiveHelper.getCards();
         break;
+      case CardListType.EDIT_DECK_CARDS:
+        yugiohCards = HiveHelper.getCards();
+        break;
       case CardListType.BANLIST_CARDS:
         yugiohCards = HiveHelper.getBannedCards();
         break;
@@ -51,7 +54,10 @@ class BrowseCardsUi extends StatelessWidget {
     return Scaffold(
       body: ListView.builder(
         itemCount: cards.length,
-        itemBuilder: (context, index) => CardListTile(card: cards[index]),
+        itemBuilder: (context, index) => CardListTile(
+          card: cards[index],
+          isFromEditDeck: cardListType == CardListType.EDIT_DECK_CARDS,
+        ),
       ),
     );
   }

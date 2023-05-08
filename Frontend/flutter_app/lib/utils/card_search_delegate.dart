@@ -36,12 +36,19 @@ class CardSearchDelegate extends SearchDelegate<String> {
     );
   }
 
-  // TODO: SHOW LAST SEARCHES
   @override
   Widget buildSuggestions(BuildContext context) {
-    //show last 5 searches
     return ListView(
-      children: [],
+      padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 32),
+      children: const [
+        Text(
+          'Search cards by name or description',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+          ),
+        ),
+      ],
     );
   }
 
