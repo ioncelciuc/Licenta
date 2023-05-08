@@ -3,6 +3,7 @@ import 'package:flutter_app/components/custom_drawer.dart';
 import 'package:flutter_app/models/drawer_item.dart';
 import 'package:flutter_app/screens/browse_database/browse_database_screen.dart';
 import 'package:flutter_app/screens/browse_favourites/browse_favourites_screen.dart';
+import 'package:flutter_app/screens/dashboard/dashboard_screen.dart';
 
 class HomeUi extends StatefulWidget {
   const HomeUi({super.key});
@@ -33,8 +34,7 @@ class _HomeUiState extends State<HomeUi> {
   getDrawerPage(int pos, GlobalKey<ScaffoldState> homeScaffoldState) {
     switch (pos) {
       case 0:
-        //DASHBOARD
-        return BrowseDatabaseScreen(homeScaffoldState: homeScaffoldState);
+        return DashboardScreen(homeScaffoldState: homeScaffoldState);
       case 1:
         return BrowseDatabaseScreen(homeScaffoldState: homeScaffoldState);
       case 2:

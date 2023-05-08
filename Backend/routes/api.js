@@ -27,8 +27,10 @@ router.post('/save_deck_content', checkAuth, ApiController.save_deck_content);
 
 router.get('/user_decks', checkAuth, ApiController.get_user_decks);
 
-router.get('/cards_from_deck/:id', checkAuth, ApiController.get_cards_from_deck);
+router.get('/cards_from_deck/:id', ApiController.get_cards_from_deck);
 
 router.get('/empty_deck/:id', checkAuth, ApiController.empty_deck);
+
+router.post('/search_decks', ApiController.search_decks);
 
 module.exports = router;

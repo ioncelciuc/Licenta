@@ -34,7 +34,7 @@ class _SignInScreenState extends State<SignInScreen> {
             SnackbarHandler(
               context: context,
               isError: false,
-              message: "Account created successfully",
+              message: "Sign in successfull",
             );
             Navigator.of(context).pop();
             Navigator.of(context).pop();

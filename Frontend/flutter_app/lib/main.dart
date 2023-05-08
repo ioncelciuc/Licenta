@@ -1,6 +1,7 @@
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/cubit/deck_edit_cubit.dart';
+import 'package:flutter_app/cubit/deck_search_cubit.dart';
 import 'package:flutter_app/cubit/decks_cubit.dart';
 import 'package:flutter_app/cubit/favourite_cubit.dart';
 import 'package:flutter_app/screens/initial/initial_screen.dart';
@@ -13,6 +14,7 @@ void main() {
         BlocProvider(create: (context) => FavouriteCubit()),
         BlocProvider(create: (context) => DecksCubit()),
         BlocProvider(create: (context) => DeckEditCubit()),
+        BlocProvider(create: (context) => DeckSearchCubit()),
       ],
       child: const MyApp(),
     ),

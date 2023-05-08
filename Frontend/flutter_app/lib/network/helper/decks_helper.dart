@@ -175,4 +175,40 @@ class DecksHelper {
       );
     }
   }
+
+  static Future<Response> searchDecks(String query) async {
+    try {
+      log(DotEnvPaths().searchDecks());
+      final res = await http.post(
+        Uri.parse(DotEnvPaths().searchDecks()),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({"query": query}),
+      );
+
+      if (res.statusCode >= 200 && res.statusCode <= 299) {
+        List<Deck> decks = [];
+        log(res.body);
+        Map<String, dynamic> body = jsonDecode(res.body);
+        List jsonList = body['decks'];
+        for (var json in jsonList) {
+          decks.add(Deck.fromJson(json as Map<String, dynamic>));
+        }
+        return Response(success: true, obj: decks);
+      } else {
+        return Response(
+          success: false,
+          message: 'Search decks failed with status code ${res.statusCode}',
+        );
+      }
+    } catch (e) {
+      String message = "Error on search decks!";
+      log(message, error: e);
+      return Response(
+        success: false,
+        message: message,
+      );
+    }
+  }
 }

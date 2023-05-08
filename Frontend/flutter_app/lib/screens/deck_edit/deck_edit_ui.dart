@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/custom_button.dart';
 import 'package:flutter_app/components/image_display.dart';
@@ -8,18 +10,20 @@ import 'package:flutter_app/models/deck.dart';
 import 'package:flutter_app/models/deck_card.dart';
 import 'package:flutter_app/models/yugioh_card.dart';
 import 'package:flutter_app/screens/card_details/card_details_screen.dart';
+import 'package:flutter_app/screens/deck_edit/random_cards_ui.dart';
 import 'package:flutter_app/screens/deck_edit_card_list/deck_edit_card_list_ui.dart';
-import 'package:flutter_app/utils/app_router.dart';
 import 'package:flutter_app/utils/hive_helper.dart';
 import 'package:flutter_app/utils/image_type.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DeckEditUi extends StatefulWidget {
   final Deck deck;
+  final bool isEditable;
 
   const DeckEditUi({
     super.key,
     required this.deck,
+    required this.isEditable,
   });
 
   @override
@@ -123,18 +127,34 @@ class _DeckEditUiState extends State<DeckEditUi> {
         title: Text(widget.deck.name!),
         centerTitle: true,
         actions: [
-          IconButton(
-            onPressed: () {
-              saveDeck();
-            },
-            icon: const Icon(Icons.save),
-          ),
-          IconButton(
-            onPressed: () {
-              deleteDeckAndContents(context);
-            },
-            icon: const Icon(Icons.delete),
-          ),
+          main.length < 40 || main.length > 60
+              ? Container()
+              : IconButton(
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => RandomCardsUi(main: main),
+                      ),
+                    );
+                  },
+                  icon: const Icon(Icons.shuffle_rounded),
+                ),
+          !widget.isEditable
+              ? Container()
+              : IconButton(
+                  onPressed: () {
+                    saveDeck();
+                  },
+                  icon: const Icon(Icons.save),
+                ),
+          !widget.isEditable
+              ? Container()
+              : IconButton(
+                  onPressed: () {
+                    deleteDeckAndContents(context);
+                  },
+                  icon: const Icon(Icons.delete),
+                ),
         ],
       ),
       body: ListView.builder(
@@ -169,7 +189,7 @@ class _DeckEditUiState extends State<DeckEditUi> {
                       MaterialPageRoute(
                         builder: (context) => CardDetailsScreen(
                           card: main[index],
-                          isDeckEdit: true,
+                          isDeckEdit: widget.isEditable,
                         ),
                       ),
                     )
@@ -213,7 +233,7 @@ class _DeckEditUiState extends State<DeckEditUi> {
                       MaterialPageRoute(
                         builder: (context) => CardDetailsScreen(
                           card: extra[index],
-                          isDeckEdit: true,
+                          isDeckEdit: widget.isEditable,
                         ),
                       ),
                     )
@@ -257,7 +277,7 @@ class _DeckEditUiState extends State<DeckEditUi> {
                       MaterialPageRoute(
                         builder: (context) => CardDetailsScreen(
                           card: side[index],
-                          isDeckEdit: true,
+                          isDeckEdit: widget.isEditable,
                         ),
                       ),
                     )
@@ -276,20 +296,22 @@ class _DeckEditUiState extends State<DeckEditUi> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          Navigator.of(context)
-              .push(
-            MaterialPageRoute(
-              builder: (context) => const DeckEditCardListUi(),
+      floatingActionButton: !widget.isEditable
+          ? null
+          : FloatingActionButton(
+              onPressed: () async {
+                Navigator.of(context)
+                    .push(
+                  MaterialPageRoute(
+                    builder: (context) => const DeckEditCardListUi(),
+                  ),
+                )
+                    .then((value) {
+                  setState(() {});
+                });
+              },
+              child: const Icon(Icons.add),
             ),
-          )
-              .then((value) {
-            setState(() {});
-          });
-        },
-        child: const Icon(Icons.add),
-      ),
     );
   }
 

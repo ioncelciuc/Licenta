@@ -64,10 +64,17 @@ class AppRouter {
     );
   }
 
-  static void openDeckEditPage(BuildContext context, Deck deck) {
+  static void openDeckEditPage(
+    BuildContext context,
+    Deck deck,
+    bool isEditable,
+  ) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => DeckEditScreen(deck: deck),
+        builder: (context) => DeckEditScreen(
+          deck: deck,
+          isEditable: isEditable,
+        ),
       ),
     );
   }

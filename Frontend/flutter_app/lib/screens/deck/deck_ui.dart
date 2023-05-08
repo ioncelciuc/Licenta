@@ -36,6 +36,7 @@ class _DeckUiState extends State<DeckUi> {
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
         itemCount: decks.length,
         itemBuilder: (context, index) => DeckListTile(
+          isEditable: true,
           deck: decks[index],
         ),
       ),

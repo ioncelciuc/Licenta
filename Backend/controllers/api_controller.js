@@ -179,14 +179,9 @@ exports.get_user_decks = async function(req, res, next){
 
 exports.get_cards_from_deck = async function(req, res, next){
     try {
-        let uid = req.userData.id;
         const deck = await Deck.findOne({_id: req.params.id});
-        if(deck.userId === uid){
-            const cards = await DeckContent.find({deckId: req.params.id});
-            res.send(cards);
-        }else{
-            res.send({error: "No deck found with this ID"});
-        }
+        const cards = await DeckContent.find({deckId: req.params.id});
+        res.send(cards);
     } catch (e) {
         console.log(e);
         next(e);
@@ -203,6 +198,17 @@ exports.empty_deck = async function(req, res, next){
         }else{
             res.send({error: "No deck found with this ID"});
         }
+    } catch (e) {
+        console.log(e);
+        next(e);
+    }
+}
+
+exports.search_decks = async function(req, res, next){
+    try {
+        let query = req.body.query;
+        const decks = await Deck.find({ name: { $regex: query, $options: 'i' }});
+        res.json({ success: true, decks: decks });
     } catch (e) {
         console.log(e);
         next(e);

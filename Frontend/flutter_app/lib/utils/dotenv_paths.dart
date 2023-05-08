@@ -21,6 +21,7 @@ class DotEnvPaths {
   final String _GET_USER_DECKS = 'GET_USER_DECKS';
   final String _GET_CARDS_FROM_DECK = 'GET_CARDS_FROM_DECK';
   final String _EMPTY_DECK = 'EMPTY_DECK';
+  final String _SEARCH_DECKS = 'SEARCH_DECKS';
 
   String signUp() {
     String path = '${dotenv.env[_API_URL]}/${dotenv.env[_AUTH_SIGN_UP]}';
@@ -99,6 +100,11 @@ class DotEnvPaths {
 
   String emptyDeck() {
     String path = '${dotenv.env[_API_URL]}/${dotenv.env[_EMPTY_DECK]}';
+    return path;
+  }
+
+  String searchDecks() {
+    String path = '${dotenv.env[_API_URL]}/${dotenv.env[_SEARCH_DECKS]}';
     return path;
   }
 }

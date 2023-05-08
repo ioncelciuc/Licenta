@@ -9,10 +9,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DeckEditScreen extends StatelessWidget {
   final Deck deck;
+  final bool isEditable;
 
   const DeckEditScreen({
     super.key,
     required this.deck,
+    required this.isEditable,
   });
 
   @override
@@ -41,7 +43,7 @@ class DeckEditScreen extends StatelessWidget {
         if (state is DeckEditLoading) {
           return const LoadingScreenUi();
         }
-        return DeckEditUi(deck: deck);
+        return DeckEditUi(deck: deck, isEditable: isEditable);
       },
     );
   }

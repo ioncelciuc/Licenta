@@ -4,10 +4,12 @@ import 'package:flutter_app/utils/app_router.dart';
 
 class DeckListTile extends StatelessWidget {
   final Deck deck;
+  final bool isEditable;
 
   const DeckListTile({
     super.key,
     required this.deck,
+    required this.isEditable,
   });
 
   @override
@@ -16,7 +18,7 @@ class DeckListTile extends StatelessWidget {
       elevation: 10,
       child: InkWell(
         onTap: () {
-          AppRouter.openDeckEditPage(context, deck);
+          AppRouter.openDeckEditPage(context, deck, isEditable);
         },
         child: ListTile(
           enableFeedback: true,

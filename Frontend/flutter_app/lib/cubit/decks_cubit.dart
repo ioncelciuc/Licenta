@@ -12,6 +12,7 @@ class DecksCubit extends Cubit<DecksState> {
 
   emitInitialState() {
     emit(DecksInitial());
+    decks = [];
   }
 
   getDecks() async {
