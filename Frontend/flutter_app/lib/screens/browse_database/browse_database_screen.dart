@@ -31,7 +31,17 @@ class _BrowseDatabaseScreenState extends State<BrowseDatabaseScreen>
   @override
   void initState() {
     tabController = TabController(length: 3, vsync: this);
+    tabController.addListener(tabControllerListener);
     super.initState();
+  }
+
+  tabControllerListener() {
+    if (tabController.indexIsChanging) {
+      setState(() {
+        currentIndex = tabController.index;
+        print(currentIndex);
+      });
+    }
   }
 
   @override
@@ -58,28 +68,31 @@ class _BrowseDatabaseScreenState extends State<BrowseDatabaseScreen>
           tabs: tabs,
         ),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: () {
-              CardListType? cardListType;
-              if (tabController.index == 0) {
-                cardListType = CardListType.ALL_CARDS;
-              }
-              if (tabController.index == 1) {
-                cardListType = CardListType.BANLIST_CARDS;
-              }
-              showSearch(
-                context: context,
-                delegate: CardSearchDelegate(
-                  listType: cardListType,
+          currentIndex == 2
+              ? Container()
+              : IconButton(
+                  icon: const Icon(Icons.search),
+                  onPressed: () {
+                    CardListType? cardListType;
+                    if (tabController.index == 0) {
+                      cardListType = CardListType.ALL_CARDS;
+                    }
+                    if (tabController.index == 1) {
+                      cardListType = CardListType.BANLIST_CARDS;
+                    }
+                    showSearch(
+                      context: context,
+                      delegate: CardSearchDelegate(
+                        listType: cardListType,
+                      ),
+                    );
+                  },
                 ),
-              );
-            },
-          ),
         ],
       ),
       body: TabBarView(
         controller: tabController,
+        physics: const NeverScrollableScrollPhysics(),
         children: const [
           BrowseCardsScreen(cardListType: CardListType.ALL_CARDS),
           BrowseCardsScreen(cardListType: CardListType.BANLIST_CARDS),
