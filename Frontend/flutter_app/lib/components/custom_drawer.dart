@@ -45,6 +45,13 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   )
                 : const SizedBox(),
             ListTile(
+              leading: const Icon(Icons.settings),
+              title: const Text('Settings'),
+              onTap: () {
+                AppRouter.openSettingsPage(context);
+              },
+            ),
+            ListTile(
               leading: const Icon(Icons.info),
               title: const Text('About'),
               onTap: () {
