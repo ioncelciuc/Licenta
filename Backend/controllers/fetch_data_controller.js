@@ -140,9 +140,13 @@ exports.get_cards = function (req, res, next) {
 
 exports.get_card_images = async function (req, res, next) {
     try {
-        const resultDeletion = await YuGiOhImage.deleteMany({});
         const cardList = await YuGiOhCard.find({});
         for (i = 0; i < cardList.length; i++) {
+            const listOfImages = await YuGiOhImage.find({id: cardList[i].id});
+            if(listOfImages.length > 0){
+                console.log(`Card number ${i} with id ${cardList[i].id} already in image db`);
+                continue;
+            }
             for (j = 0; j < cardList[i]['card_images'].length; j++) {
                 console.log("Card number " + i + " image " + j);
                 var imageId = cardList[i]['card_images'][j]['id'];
