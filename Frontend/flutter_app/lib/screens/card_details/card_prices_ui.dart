@@ -25,6 +25,7 @@ class CardPricesUi extends StatelessWidget {
                   Uri.parse(
                     'https://www.cardmarket.com/en/YuGiOh/Products/Singles?searchString=${card.name!}',
                   ),
+                  mode: LaunchMode.externalApplication,
                 );
               },
               child: Container(
@@ -58,6 +59,7 @@ class CardPricesUi extends StatelessWidget {
                   Uri.parse(
                     'https://www.tcgplayer.com/search/yugioh/product?productLineName=yugioh&q=${card.name!}&view=grid&ProductTypeName=Cards&page=1',
                   ),
+                  mode: LaunchMode.externalApplication,
                 );
               },
               child: Container(
@@ -91,6 +93,7 @@ class CardPricesUi extends StatelessWidget {
                   Uri.parse(
                     'https://www.coolstuffinc.com/main_search.php?pa=searchOnName&page=1&resultsPerPage=25&q=${card.name!}&sh=1',
                   ),
+                  mode: LaunchMode.externalApplication,
                 );
               },
               child: Container(
