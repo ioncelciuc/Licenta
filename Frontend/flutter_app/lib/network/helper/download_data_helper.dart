@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:flutter_app/models/archetype.dart';
 import 'package:flutter_app/models/card_set.dart';
 import 'package:flutter_app/models/database_version.dart';
+import 'package:flutter_app/models/translation.dart';
 import 'package:flutter_app/models/yugioh_card.dart';
 import 'package:flutter_app/models/yugioh_image.dart';
 import 'package:flutter_app/network/response/response.dart';
@@ -81,6 +82,26 @@ class DownloadDataHelper {
       return Response(success: true, obj: cards);
     } catch (e) {
       String message = "Error on download cards!";
+      log(message, error: e);
+      return Response(
+        success: false,
+        message: message,
+      );
+    }
+  }
+
+  static Future<Response> downloadTranslations() async {
+    try {
+      String path = DotEnvPaths().getTranslations();
+      http.Response res = await http.get(Uri.parse(path));
+      final jsonList = jsonDecode(res.body);
+      List<Translation> translations = [];
+      for (var json in jsonList) {
+        translations.add(Translation.fromJson(json));
+      }
+      return Response(success: true, obj: translations);
+    } catch (e) {
+      String message = "Error on download translations!";
       log(message, error: e);
       return Response(
         success: false,

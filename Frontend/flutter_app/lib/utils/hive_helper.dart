@@ -1,5 +1,6 @@
 import 'package:flutter_app/models/archetype.dart';
 import 'package:flutter_app/models/favourite_card.dart';
+import 'package:flutter_app/models/translation.dart';
 import 'package:flutter_app/models/yugioh_card.dart';
 import 'package:flutter_app/models/card_set.dart';
 import 'package:flutter_app/models/database_version.dart';
@@ -13,6 +14,7 @@ class HiveHelper {
   static const String cards = 'cards';
   static const String images = 'images';
   static const String favourites = 'favourites';
+  static const String translations = 'translations';
 
   static DatabaseVersion getDatabaseVersion() {
     return Hive.box<DatabaseVersion>(databaseVersion).values.toList()[0];
@@ -64,6 +66,12 @@ class HiveHelper {
 
   static List<YuGiOhCard> getCards() {
     return Hive.box<YuGiOhCard>(cards).values.toList().cast<YuGiOhCard>();
+  }
+
+  static YuGiOhCard getCardById(int cardId) {
+    return Hive.box<YuGiOhCard>(cards)
+        .values
+        .firstWhere((element) => element.cardId == cardId);
   }
 
   static List<YuGiOhCard> getBannedCards() {
@@ -190,6 +198,27 @@ class HiveHelper {
 
   static Future<void> deleteCards() async {
     await Hive.box<YuGiOhCard>(cards).clear();
+  }
+
+  static Future<void> insertTranslations(
+    List<Translation> translationList,
+  ) async {
+    for (Translation translation in translationList) {
+      await Hive.box<Translation>(translations).add(translation);
+    }
+  }
+
+  static List<Translation> getCardsByTranslationNameOrId(String query) {
+    return Hive.box<Translation>(translations)
+        .values
+        .where((element) =>
+            element.name!.toLowerCase().contains(query.toLowerCase()) ||
+            element.cardId.toString().contains(query))
+        .toList();
+  }
+
+  static Future<void> deleteTranslations() async {
+    await Hive.box<Translation>(translations).clear();
   }
 
   static Future<void> insertImage(YuGiOhImage image) async {

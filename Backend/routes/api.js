@@ -33,4 +33,6 @@ router.get('/empty_deck/:id', checkAuth, ApiController.empty_deck);
 
 router.post('/search_decks', ApiController.search_decks);
 
+router.get('/translations', ApiController.get_translations);
+
 module.exports = router;

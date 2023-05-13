@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter_app/models/archetype.dart';
 import 'package:flutter_app/models/card_set.dart';
 import 'package:flutter_app/models/database_version.dart';
+import 'package:flutter_app/models/translation.dart';
 import 'package:flutter_app/models/yugioh_card.dart';
 import 'package:flutter_app/models/yugioh_image.dart';
 import 'package:flutter_app/network/helper/download_data_helper.dart';
@@ -45,6 +46,12 @@ class DownloadDataCubit extends Cubit<DownloadDataState> {
       return;
     }
 
+    Response resTranslations = await DownloadDataHelper.downloadTranslations();
+    if (!resTranslations.success) {
+      emit(DownloadDataFailed(resTranslations));
+      return;
+    }
+
     DatabaseVersion databaseVersion = resDbVersion.obj as DatabaseVersion;
     await HiveHelper.deleteDatabaseVersion();
     await HiveHelper.insertDatabaseVersion(databaseVersion);
@@ -60,6 +67,12 @@ class DownloadDataCubit extends Cubit<DownloadDataState> {
     List<YuGiOhCard> cards = resCards.obj as List<YuGiOhCard>;
     await HiveHelper.deleteCards();
     await HiveHelper.insetCards(cards);
+
+    List<Translation> translations = resTranslations.obj as List<Translation>;
+    await HiveHelper.deleteTranslations();
+    await HiveHelper.insertTranslations(translations);
+
+    print("TRANSLATION LEN: ${translations.length}");
 
     SharedPrefsHelper.instance.setIsDataDownloaded(true);
 

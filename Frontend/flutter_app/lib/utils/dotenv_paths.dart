@@ -12,6 +12,7 @@ class DotEnvPaths {
   final String _GET_CARD_SETS = 'GET_CARD_SETS';
   final String _GET_ARCHETYPES = 'GET_ARCHETYPES';
   final String _GET_CARDS = 'GET_CARDS';
+  final String _GET_TRANSLATIONS = 'GET_TRANSLATIONS';
   final String _GET_IMAGE = 'GET_IMAGE';
   final String _GET_IMAGE_SMALL = 'GET_IMAGE_SMALL';
   final String _GET_IMAGE_CROPPED = 'GET_IMAGE_CROPPED';
@@ -55,6 +56,11 @@ class DotEnvPaths {
 
   String getCards() {
     String path = '${dotenv.env[_API_URL]}/${dotenv.env[_GET_CARDS]}';
+    return path;
+  }
+
+  String getTranslations() {
+    String path = '${dotenv.env[_API_URL]}/${dotenv.env[_GET_TRANSLATIONS]}';
     return path;
   }
 

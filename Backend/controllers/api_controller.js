@@ -5,6 +5,7 @@ const YuGiOhCardSet = require('../models/yugioh_cardset');
 const YuGiOhArchetype = require('../models/yugioh_archetype');
 const YuGiOhCard = require('../models/yugioh_card');
 const YuGiOhImage = require('../models/yugioh_image');
+const Translation = require('../models/translation');
 
 const Deck = require('../models/deck');
 const DeckContent = require('../models/deck_content');
@@ -44,6 +45,16 @@ exports.get_cards = async function(req, res, next){
         const cards = await YuGiOhCard.find({});
         res.send(cards);
     } catch (e) {
+        console.log(e);
+        next(e);
+    }
+}
+
+exports.get_translations = async function(req, res, next){
+    try{
+        const translations = await Translation.find({});
+        res.send(translations);
+    }catch(e){
         console.log(e);
         next(e);
     }

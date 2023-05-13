@@ -6,6 +6,7 @@ const YuGiOhCardSet = require('../models/yugioh_cardset');
 const YuGiOhArchetype = require('../models/yugioh_archetype');
 const YuGiOhCard = require('../models/yugioh_card');
 const YuGiOhImage = require('../models/yugioh_image');
+const Translation = require('../models/translation');
 
 exports.get_db_version = function (req, res, next) {
     var options = {
@@ -136,6 +137,117 @@ exports.get_cards = function (req, res, next) {
             res.status(500).send({ error: 'Internal Server Error' });
         }
     }).end();
+}
+
+exports.get_translations = async function(req, res, next){
+    var translations = [];
+    try {
+        console.log("Getting de cards");
+        var deTranslations = await getTranslationForLanguage('de');
+        console.log("Getting fr cards");
+        var frTranslations = await getTranslationForLanguage('fr');
+        console.log("Getting it cards");
+        var itTranslations = await getTranslationForLanguage('it');
+        console.log("Getting pt cards");
+        var ptTranslations = await getTranslationForLanguage('pt');
+        
+        translations.push(...deTranslations);
+        translations.push(...frTranslations);
+        translations.push(...itTranslations);
+        translations.push(...ptTranslations);
+
+        Translation.deleteMany({}).then(function (deletedData) {
+            console.log("deleted");
+            Translation.insertMany(translations).then(function (newTranslations) {
+                res.send({
+                    'deleted_data': deletedData,
+                    'new_version': newTranslations
+                })
+            }).catch(next);
+        }).catch(next);
+    } catch (error) {
+        console.log(error);
+        next(error);
+    }
+}
+
+function getTranslationForLanguage(languageCode){
+    return new Promise((resolve, reject) => {
+        var options = {
+            host: 'db.ygoprodeck.com',
+            path: '/api/v7/cardinfo.php?language=' + languageCode,
+            method: 'GET'
+        };
+
+        const request = http.request(options, function (response) {
+            if (('' + response.statusCode).match(/^2\d\d$/)) {
+                var chunks = [];
+                response.on('data', function (chunk) {
+                    chunks.push(chunk);
+                });
+                response.on('end', async function () {
+                    var data = JSON.parse(Buffer.concat(chunks).toString());
+                    var cards = data["data"];
+                    var translations = [];
+                    for (let index in cards) {
+                        var translation = {
+                            "id": cards[index]['id'],
+                            "name": cards[index]['name'],
+                            "language_code": languageCode,
+                        };
+                        translations.push(translation);
+                    }
+                    console.log("NUMBER OF CARDS IN " +  languageCode + ": " + translations.length);
+                    resolve(translations);
+                });
+            } else {
+                reject(new Error('Error on get translations in language ' + languageCode));
+            }
+        });
+
+        request.on('error', (error) => {
+            reject(error);
+        });
+
+        request.end();
+    });
+    // var options = {
+    //     host: 'db.ygoprodeck.com',
+    //     path: '/api/v7/cardinfo.php?language=' + languageCode,
+    //     method: 'GET'
+    // };
+    // console.log(options);
+    // // var chIndex = 1;
+    // http.request(options, function (response) {
+    //     if (('' + response.statusCode).match(/^2\d\d$/)) {
+    //         var chunks = [];
+    //         response.on('data', function (chunk) {
+    //             chunks.push(chunk);
+    //             // console.log("Chunk number " + chIndex);
+    //             // chIndex += 1;
+    //         });
+    //         response.on('end', async function () {
+    //             var data = JSON.parse(Buffer.concat(chunks).toString());
+    //             var cards = data["data"];
+    //             var translations = [];
+    //             for(let index in cards){
+    //                 // console.log(cards[index]);
+    //                 var translation = {
+    //                     "id": cards[index]['id'],
+    //                     "name": cards[index]['name'],
+    //                     "language_code": languageCode,
+    //                 };
+    //                 // console.log(translation);
+    //                 translations.push(translation);
+    //             }
+    //             console.log("NUMBER OF CARDS IN " +  languageCode + ": " + translations.length);
+    //             return translations;
+    //         });
+    //     } else {
+    //         throw 'Error on get translations in language ' + languageCode;
+    //         // res.status(500).send({ error: 'Internal Server Error' });
+    //     }
+    // }).end();
 }
 
 exports.get_card_images = async function (req, res, next) {

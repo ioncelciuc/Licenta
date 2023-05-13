@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/card_list_tile.dart';
+import 'package:flutter_app/models/translation.dart';
 import 'package:flutter_app/models/yugioh_card.dart';
 import 'package:flutter_app/utils/card_list_type.dart';
 import 'package:flutter_app/utils/hive_helper.dart';
@@ -33,17 +34,32 @@ class BrowseCardsUi extends StatelessWidget {
         yugiohCards = HiveHelper.getArchetypeCards(searchParams!);
         break;
     }
-    if (searchParams != null) {
-      if (cardListType == CardListType.ARCHETYPE_CARDS) {
-        //handle archetype search
-      }
-      return yugiohCards
+    if (searchParams != null && searchParams.isNotEmpty) {
+      // if (cardListType == CardListType.ARCHETYPE_CARDS) {
+      //   //handle archetype search
+      // }
+      yugiohCards = yugiohCards
           .where((element) =>
               element.name!
                   .toLowerCase()
                   .contains(searchParams.toLowerCase()) ||
               element.desc!.toLowerCase().contains(searchParams.toLowerCase()))
           .toList();
+
+      if (cardListType == CardListType.ALL_CARDS ||
+          cardListType == CardListType.EDIT_DECK_CARDS) {
+        List<Translation> translations =
+            HiveHelper.getCardsByTranslationNameOrId(searchParams);
+        for (Translation translation in translations) {
+          YuGiOhCard cardAlreadyInList = yugiohCards.firstWhere(
+            (element) => element.cardId == translation.cardId,
+            orElse: () => YuGiOhCard(),
+          );
+          if (cardAlreadyInList.cardId == null) {
+            yugiohCards.add(HiveHelper.getCardById(translation.cardId!));
+          }
+        }
+      }
     }
     return yugiohCards;
   }

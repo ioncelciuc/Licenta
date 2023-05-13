@@ -14,4 +14,6 @@ router.get('/card_images', FetchDataController.get_card_images);
 
 router.get('/image', FetchDataController.get_image);
 
+router.get('/translations', FetchDataController.get_translations);
+
 module.exports = router
