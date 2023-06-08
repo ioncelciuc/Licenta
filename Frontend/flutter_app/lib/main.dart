@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
       theme: FlexThemeData.light(scheme: FlexScheme.tealM3),
       darkTheme: FlexThemeData.dark(
         scheme: FlexScheme.tealM3,
-        // darkIsTrueBlack: true,
+        darkIsTrueBlack: true,
       ),
       themeMode: ThemeMode.system,
       home: const InitialScreen(),
