@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/loading_screen_ui.dart';
+import 'package:flutter_app/components/snackbar_handler.dart';
 import 'package:flutter_app/cubit/download_data_cubit.dart';
 import 'package:flutter_app/screens/download_data/download_data_failed_ui.dart';
 import 'package:flutter_app/screens/download_data/download_data_initial_ui.dart';
@@ -14,7 +15,15 @@ class DownloadDataScreen extends StatelessWidget {
     return BlocProvider(
       create: (context) => DownloadDataCubit(),
       child: BlocConsumer<DownloadDataCubit, DownloadDataState>(
-        listener: (context, state) {},
+        listener: (context, state) {
+          if (state is DownloadDataFailed) {
+            SnackbarHandler(
+              context: context,
+              isError: true,
+              message: state.response.message ?? 'Unknown error',
+            );
+          }
+        },
         builder: (context, state) {
           if (state is DownloadDataInitial) {
             return const DownloadDataInitialUi();
