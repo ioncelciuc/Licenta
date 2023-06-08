@@ -103,7 +103,7 @@ class _CalculatorUiState extends State<CalculatorUi> {
                       child: Text(
                         '${BlocProvider.of<CalculatorCubit>(context).lp1}',
                         style: TextStyle(
-                          fontSize: 45,
+                          fontSize: 40,
                           fontWeight: BlocProvider.of<CalculatorCubit>(context)
                                   .lp1Selected
                               ? FontWeight.bold
@@ -164,7 +164,7 @@ class _CalculatorUiState extends State<CalculatorUi> {
                       child: Text(
                         '${BlocProvider.of<CalculatorCubit>(context).lp2}',
                         style: TextStyle(
-                          fontSize: 45,
+                          fontSize: 40,
                           fontWeight: !BlocProvider.of<CalculatorCubit>(context)
                                   .lp1Selected
                               ? FontWeight.bold
