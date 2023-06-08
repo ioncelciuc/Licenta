@@ -1,4 +1,6 @@
 import 'package:flutter_app/models/archetype.dart';
+import 'package:flutter_app/models/calculator_data.dart';
+import 'package:flutter_app/models/counter.dart';
 import 'package:flutter_app/models/favourite_card.dart';
 import 'package:flutter_app/models/translation.dart';
 import 'package:flutter_app/models/yugioh_card.dart';
@@ -15,6 +17,32 @@ class HiveHelper {
   static const String images = 'images';
   static const String favourites = 'favourites';
   static const String translations = 'translations';
+  static const String calculatorData = 'calculator_data';
+
+  static Future<CalculatorData> getCalculatorData() async {
+    CalculatorData cd;
+    List<CalculatorData> cdList =
+        Hive.box<CalculatorData>(calculatorData).values.toList();
+    if (cdList.isEmpty) {
+      cd = CalculatorData(
+        lp1Evo: [8000],
+        lp2Evo: [8000],
+        lp1: 8000,
+        lp2: 8000,
+        lp1Selected: true,
+        counters: List<Counter>.filled(24, Counter(), growable: false),
+      );
+      await insertCalculatorData(cd);
+    } else {
+      cd = cdList[0];
+    }
+    return cd;
+  }
+
+  static Future<void> insertCalculatorData(CalculatorData cd) async {
+    await Hive.box<CalculatorData>(calculatorData).clear();
+    await Hive.box<CalculatorData>(calculatorData).add(cd);
+  }
 
   static DatabaseVersion getDatabaseVersion() {
     return Hive.box<DatabaseVersion>(databaseVersion).values.toList()[0];

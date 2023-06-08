@@ -19,7 +19,7 @@ class _AboutUiState extends State<AboutUi> {
         padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 32),
         children: const [
           Text(
-            'Proiect de licență realizat de Ciuc Ionuț-Tiberiu, sub îndrumarea domnului Conf. Univ. Dr. Vidrașcu Cristian.',
+            'Proiect de licență realizat de Ciuc Ionuț-Tiberiu, sub îndrumarea domnului Lect. Dr. Vidrașcu Cristian.',
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
@@ -27,7 +27,7 @@ class _AboutUiState extends State<AboutUi> {
           ),
           SizedBox(height: 32),
           Text(
-            'Bachelor\'s thesis project developed by Ciuc Ionuț-Tiberiu, under the guidance of Associate Professor, PhD Vidrașcu Cristian.',
+            'Bachelor\'s thesis project developed by Ciuc Ionuț-Tiberiu, under the guidance of Lect. PhD Vidrașcu Cristian.',
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,

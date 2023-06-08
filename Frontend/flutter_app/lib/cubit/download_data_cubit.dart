@@ -72,8 +72,6 @@ class DownloadDataCubit extends Cubit<DownloadDataState> {
     await HiveHelper.deleteTranslations();
     await HiveHelper.insertTranslations(translations);
 
-    print("TRANSLATION LEN: ${translations.length}");
-
     SharedPrefsHelper.instance.setIsDataDownloaded(true);
 
     emit(DownloadDataCompleted());

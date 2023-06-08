@@ -4,8 +4,10 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/app_bar_drawer.dart';
 import 'package:flutter_app/components/calculator_button.dart';
-import 'package:flutter_app/components/custom_button.dart';
 import 'package:flutter_app/components/utility_button.dart';
+import 'package:flutter_app/cubit/calculator_cubit.dart';
+import 'package:flutter_app/screens/calculator/counters_ui.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CalculatorUi extends StatefulWidget {
   final GlobalKey<ScaffoldState> homeScaffoldState;
@@ -20,16 +22,8 @@ class CalculatorUi extends StatefulWidget {
 }
 
 class _CalculatorUiState extends State<CalculatorUi> {
-  bool isTimeRunning = false;
-  int seconds = 0;
-
-  int lp1 = 8000;
-  int lp2 = 8000;
   int lpToSubstract = 0;
   String operation = '';
-  bool lp1Selected = true;
-  List<int> lp1Evo = [8000];
-  List<int> lp2Evo = [8000];
   List<String> dice = [
     'assets/d1.png',
     'assets/d2.png',
@@ -46,89 +40,50 @@ class _CalculatorUiState extends State<CalculatorUi> {
   ];
   int coinValue = 0;
 
-  startTimer() {
-    Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (isTimeRunning && seconds < 40 * 60) {
-        setState(() {
-          seconds++;
-        });
-      }
-    });
-  }
-
-  @override
-  void initState() {
-    startTimer();
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarDrawer(
         title: 'Calculator',
         homeScaffoldState: widget.homeScaffoldState,
+        actions: [
+          IconButton(
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: const Text('Reset calculator data?'),
+                  content: const Text(
+                    'Be aware, the current state of the game will be lost',
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text('Cancel'),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        BlocProvider.of<CalculatorCubit>(context)
+                            .resetCalculatorValues();
+                        BlocProvider.of<CalculatorCubit>(context)
+                            .updateCalculatorValues();
+                        Navigator.of(context).pop();
+                        setState(() {});
+                      },
+                      child: const Text('Reset'),
+                    ),
+                  ],
+                ),
+              );
+            },
+            icon: const Icon(Icons.replay),
+          ),
+        ],
       ),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    child: Text('B1'),
-                    onPressed: () {},
-                  ),
-                ),
-                SizedBox(width: 16),
-                Container(
-                  padding: const EdgeInsets.only(right: 16),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      width: 2,
-                      color: Theme.of(context).primaryColor,
-                    ),
-                    borderRadius: BorderRadius.circular(0),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          setState(() {
-                            isTimeRunning = !isTimeRunning;
-                          });
-                        },
-                        icon: Icon(
-                          isTimeRunning
-                              ? Icons.pause_circle
-                              : Icons.play_circle,
-                          size: 30,
-                        ),
-                      ),
-                      const SizedBox(width: 32),
-                      Text(
-                        '${seconds / 60 < 10 ? '0${seconds ~/ 60}' : seconds ~/ 60}:${seconds % 60 < 10 ? '0${seconds % 60}' : seconds % 60}',
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(width: 16),
-                Expanded(
-                  child: ElevatedButton(
-                    child: Text('B2'),
-                    onPressed: () {},
-                  ),
-                ),
-              ],
-            ),
-          ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Row(
@@ -138,17 +93,23 @@ class _CalculatorUiState extends State<CalculatorUi> {
                   child: InkWell(
                     onTap: () {
                       setState(() {
-                        lp1Selected = true;
+                        BlocProvider.of<CalculatorCubit>(context).lp1Selected =
+                            true;
+                        BlocProvider.of<CalculatorCubit>(context)
+                            .updateCalculatorValues();
                       });
                     },
                     child: Center(
                       child: Text(
-                        '$lp1',
+                        '${BlocProvider.of<CalculatorCubit>(context).lp1}',
                         style: TextStyle(
                           fontSize: 45,
-                          fontWeight:
-                              lp1Selected ? FontWeight.bold : FontWeight.w300,
-                          decoration: lp1Selected
+                          fontWeight: BlocProvider.of<CalculatorCubit>(context)
+                                  .lp1Selected
+                              ? FontWeight.bold
+                              : FontWeight.w300,
+                          decoration: BlocProvider.of<CalculatorCubit>(context)
+                                  .lp1Selected
                               ? TextDecoration.underline
                               : TextDecoration.none,
                         ),
@@ -156,39 +117,60 @@ class _CalculatorUiState extends State<CalculatorUi> {
                     ),
                   ),
                 ),
-                SizedBox(width: 16),
+                const SizedBox(width: 16),
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: lp1Evo.length == 1
+                    onPressed: BlocProvider.of<CalculatorCubit>(context)
+                                .lp1Evo
+                                .length ==
+                            1
                         ? null
                         : () {
-                            lp1Evo.removeLast();
-                            lp2Evo.removeLast();
-                            lp1 = lp1Evo.last;
-                            lp2 = lp2Evo.last;
+                            BlocProvider.of<CalculatorCubit>(context)
+                                .lp1Evo
+                                .removeLast();
+                            BlocProvider.of<CalculatorCubit>(context)
+                                .lp2Evo
+                                .removeLast();
+                            BlocProvider.of<CalculatorCubit>(context).lp1 =
+                                BlocProvider.of<CalculatorCubit>(context)
+                                    .lp1Evo
+                                    .last;
+                            BlocProvider.of<CalculatorCubit>(context).lp2 =
+                                BlocProvider.of<CalculatorCubit>(context)
+                                    .lp2Evo
+                                    .last;
                             lpToSubstract = 0;
                             operation = '';
+                            BlocProvider.of<CalculatorCubit>(context)
+                                .updateCalculatorValues();
                             setState(() {});
                           },
-                    child: Text('Undo'),
+                    child: const Text('Undo'),
                   ),
                 ),
-                SizedBox(width: 16),
+                const SizedBox(width: 16),
                 Expanded(
                   child: InkWell(
                     onTap: () {
                       setState(() {
-                        lp1Selected = false;
+                        BlocProvider.of<CalculatorCubit>(context).lp1Selected =
+                            false;
+                        BlocProvider.of<CalculatorCubit>(context)
+                            .updateCalculatorValues();
                       });
                     },
                     child: Center(
                       child: Text(
-                        '$lp2',
+                        '${BlocProvider.of<CalculatorCubit>(context).lp2}',
                         style: TextStyle(
                           fontSize: 45,
-                          fontWeight:
-                              !lp1Selected ? FontWeight.bold : FontWeight.w300,
-                          decoration: !lp1Selected
+                          fontWeight: !BlocProvider.of<CalculatorCubit>(context)
+                                  .lp1Selected
+                              ? FontWeight.bold
+                              : FontWeight.w300,
+                          decoration: !BlocProvider.of<CalculatorCubit>(context)
+                                  .lp1Selected
                               ? TextDecoration.underline
                               : TextDecoration.none,
                         ),
@@ -199,29 +181,32 @@ class _CalculatorUiState extends State<CalculatorUi> {
               ],
             ),
           ),
-          Divider(thickness: 2),
+          const Divider(thickness: 2),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Row(
               children: [
                 Text(
-                  '${lp1Selected ? lp1 : lp2}',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  '${BlocProvider.of<CalculatorCubit>(context).lp1Selected ? BlocProvider.of<CalculatorCubit>(context).lp1 : BlocProvider.of<CalculatorCubit>(context).lp2}',
+                  style: const TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 Text(
                   ' $operation ',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 Text(
                   operation.isNotEmpty && lpToSubstract != 0
                       ? lpToSubstract.toString()
                       : '',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.bold),
                 ),
               ],
             ),
           ),
-          Divider(thickness: 2),
+          const Divider(thickness: 2),
           Expanded(
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -347,15 +332,21 @@ class _CalculatorUiState extends State<CalculatorUi> {
                 CalculatorButton(
                   text: '%2',
                   onPressed: () {
-                    if (lp1Selected) {
-                      lp1 ~/= 2;
+                    if (BlocProvider.of<CalculatorCubit>(context).lp1Selected) {
+                      BlocProvider.of<CalculatorCubit>(context).lp1 ~/= 2;
                     } else {
-                      lp2 ~/= 2;
+                      BlocProvider.of<CalculatorCubit>(context).lp2 ~/= 2;
                     }
-                    lp1Evo.add(lp1);
-                    lp2Evo.add(lp2);
+                    BlocProvider.of<CalculatorCubit>(context)
+                        .lp1Evo
+                        .add(BlocProvider.of<CalculatorCubit>(context).lp1);
+                    BlocProvider.of<CalculatorCubit>(context)
+                        .lp2Evo
+                        .add(BlocProvider.of<CalculatorCubit>(context).lp2);
                     lpToSubstract = 0;
                     operation = '';
+                    BlocProvider.of<CalculatorCubit>(context)
+                        .updateCalculatorValues();
                     setState(() {});
                   },
                 ),
@@ -393,27 +384,43 @@ class _CalculatorUiState extends State<CalculatorUi> {
                 CalculatorButton(
                   text: '=',
                   onPressed: () {
-                    if (lp1Selected) {
+                    if (BlocProvider.of<CalculatorCubit>(context).lp1Selected) {
                       if (operation == '-') {
-                        lp1 -= lpToSubstract;
+                        BlocProvider.of<CalculatorCubit>(context).lp1 -=
+                            lpToSubstract;
                       } else if (operation == '+') {
-                        lp1 += lpToSubstract;
+                        BlocProvider.of<CalculatorCubit>(context).lp1 +=
+                            lpToSubstract;
                       }
-                      lp1 = lp1 > 0 ? lp1 : 0;
+                      BlocProvider.of<CalculatorCubit>(context).lp1 =
+                          BlocProvider.of<CalculatorCubit>(context).lp1 > 0
+                              ? BlocProvider.of<CalculatorCubit>(context).lp1
+                              : 0;
                     } else {
                       if (operation == '-') {
-                        lp2 -= lpToSubstract;
+                        BlocProvider.of<CalculatorCubit>(context).lp2 -=
+                            lpToSubstract;
                       } else if (operation == '+') {
-                        lp2 += lpToSubstract;
+                        BlocProvider.of<CalculatorCubit>(context).lp2 +=
+                            lpToSubstract;
                       }
-                      lp2 = lp2 > 0 ? lp2 : 0;
+                      BlocProvider.of<CalculatorCubit>(context).lp2 =
+                          BlocProvider.of<CalculatorCubit>(context).lp2 > 0
+                              ? BlocProvider.of<CalculatorCubit>(context).lp2
+                              : 0;
                     }
                     setState(() {
                       operation = '';
                       lpToSubstract = 0;
-                      lp1Evo.add(lp1);
-                      lp2Evo.add(lp2);
+                      BlocProvider.of<CalculatorCubit>(context)
+                          .lp1Evo
+                          .add(BlocProvider.of<CalculatorCubit>(context).lp1);
+                      BlocProvider.of<CalculatorCubit>(context)
+                          .lp2Evo
+                          .add(BlocProvider.of<CalculatorCubit>(context).lp2);
                     });
+                    BlocProvider.of<CalculatorCubit>(context)
+                        .updateCalculatorValues();
                   },
                 ),
               ],
@@ -538,8 +545,14 @@ class _CalculatorUiState extends State<CalculatorUi> {
                   },
                 ),
                 UtilityButton(
-                  icon: Icon(Icons.grid_on),
-                  onPressed: () {},
+                  icon: const Icon(Icons.grid_on),
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const CountersUi(),
+                      ),
+                    );
+                  },
                 ),
               ],
             ),

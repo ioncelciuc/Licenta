@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/models/archetype.dart';
 import 'package:flutter_app/models/banlist_info.dart';
+import 'package:flutter_app/models/calculator_data.dart';
 import 'package:flutter_app/models/card_image.dart';
 import 'package:flutter_app/models/card_prices.dart';
 import 'package:flutter_app/models/card_set.dart';
+import 'package:flutter_app/models/counter.dart';
 import 'package:flutter_app/models/database_version.dart';
 import 'package:flutter_app/models/favourite_card.dart';
 import 'package:flutter_app/models/translation.dart';
@@ -71,6 +73,12 @@ class _InitialScreenState extends State<InitialScreen> {
     if (!Hive.isAdapterRegistered(10)) {
       Hive.registerAdapter(TranslationAdapter());
     }
+    if (!Hive.isAdapterRegistered(20)) {
+      Hive.registerAdapter(CounterAdapter());
+    }
+    if (!Hive.isAdapterRegistered(21)) {
+      Hive.registerAdapter(CalculatorDataAdapter());
+    }
     await Hive.openBox<DatabaseVersion>(HiveHelper.databaseVersion);
     await Hive.openBox<CardSet>(HiveHelper.cardSets);
     await Hive.openBox<Archetype>(HiveHelper.archetypes);
@@ -78,6 +86,7 @@ class _InitialScreenState extends State<InitialScreen> {
     await Hive.openBox<YuGiOhImage>(HiveHelper.images);
     await Hive.openBox<FavouriteCard>(HiveHelper.favourites);
     await Hive.openBox<Translation>(HiveHelper.translations);
+    await Hive.openBox<CalculatorData>(HiveHelper.calculatorData);
     setState(() {
       isLoading = false;
     });
