@@ -9,6 +9,7 @@ class AppBarCardDetails extends StatelessWidget with PreferredSizeWidget {
   final List<Widget> tabs = const [
     Tab(text: 'Details'),
     Tab(text: 'Prices'),
+    Tab(text: 'Sets'),
   ];
 
   AppBarCardDetails({

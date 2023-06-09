@@ -6,6 +6,7 @@ import 'package:flutter_app/models/translation.dart';
 import 'package:flutter_app/models/yugioh_card.dart';
 import 'package:flutter_app/models/card_set.dart';
 import 'package:flutter_app/models/database_version.dart';
+import 'package:flutter_app/models/yugioh_card_set.dart';
 import 'package:flutter_app/models/yugioh_image.dart';
 import 'package:hive/hive.dart';
 
@@ -54,6 +55,21 @@ class HiveHelper {
 
   static Future<void> deleteDatabaseVersion() async {
     await Hive.box<DatabaseVersion>(databaseVersion).clear();
+  }
+
+  static CardSet getCardSet(String setName) {
+    return Hive.box<CardSet>(cardSets)
+        .values
+        .firstWhere((element) => element.setName == setName);
+  }
+
+  static List<YuGiOhCard> getCardsFromSet(String setName) {
+    return Hive.box<YuGiOhCard>(cards).values.where((card) {
+      YuGiOhCardSet cardSet = card.cardSets!.firstWhere(
+          (set) => set.setName == setName,
+          orElse: () => YuGiOhCardSet());
+      return cardSet.setName != null;
+    }).toList();
   }
 
   static List<CardSet> getCardSets() {

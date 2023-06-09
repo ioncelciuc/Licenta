@@ -7,6 +7,7 @@ import 'package:flutter_app/cubit/favourite_cubit.dart';
 import 'package:flutter_app/models/yugioh_card.dart';
 import 'package:flutter_app/screens/card_details/card_main_info_ui.dart';
 import 'package:flutter_app/screens/card_details/card_prices_ui.dart';
+import 'package:flutter_app/screens/card_details/card_sets_ui.dart';
 import 'package:flutter_app/utils/hive_helper.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -36,6 +37,8 @@ class _CardDetailsScreenState extends State<CardDetailsScreen>
         return CardMainInfoUi(card: widget.card);
       case 1:
         return CardPricesUi(card: widget.card);
+      case 2:
+        return CardSetsUi(card: widget.card);
       default:
         return CardMainInfoUi(card: widget.card);
     }
@@ -59,7 +62,7 @@ class _CardDetailsScreenState extends State<CardDetailsScreen>
   @override
   void initState() {
     isFavourite = HiveHelper.isFavourite(widget.card.cardId!);
-    tabController = TabController(length: 2, vsync: this);
+    tabController = TabController(length: 3, vsync: this);
     super.initState();
   }
 
