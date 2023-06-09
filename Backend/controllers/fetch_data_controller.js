@@ -250,6 +250,63 @@ function getTranslationForLanguage(languageCode){
     // }).end();
 }
 
+const bucketName = 'ygocompanion';
+const userKey = 'AKIA226BUP5UUXWQOBE2';
+const iamUserSecret = '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';
+
+const AWS = require('aws-sdk');
+const s3 = new AWS.S3({
+    accessKeyId: userKey,
+    secretAccessKey: iamUserSecret,
+    Bucket: bucketName
+});
+const axios = require('axios');
+
+async function downloadImage(url) {
+    const response = await axios.get(url, {
+      responseType: 'arraybuffer',
+    });
+    return response.data;
+}
+
+async function uploadToS3(bucketName, key, data) {
+    const params = {
+      Bucket: bucketName,
+      Key: key,
+      Body: data,
+      ContentType: "image/jpeg"
+    };
+  
+    return s3.upload(params).promise();
+}
+
+async function uploadImagesToS3Bucket(cardId){
+    const imageUrl = 'https://images.ygoprodeck.com/images/cards/' + cardId + '.jpg';
+    const imageUrlSmall = 'https://images.ygoprodeck.com/images/cards_small/' + cardId + '.jpg';
+    console.log(imageUrl);
+    console.log(imageUrlSmall);
+
+    try{
+        const imageFile = await downloadImage(imageUrl);
+        const key = 'images/' + cardId + '.jpg';
+        const result = await uploadToS3(bucketName, key, imageFile);
+        console.log('Image uploaded successfully:', result.Location);
+    }catch(e){
+        console.log(`Failed to upload image with id: ${cardId}`);
+        console.log(e);
+    }
+    
+    try{
+        const imageFileSmall = await downloadImage(imageUrlSmall);
+        const keySmall = 'images_small/' + cardId + '.jpg';
+        const resultSmall = await uploadToS3(bucketName, keySmall, imageFileSmall);
+        console.log('Image uploaded successfully:', resultSmall.Location);
+    }catch(e){
+        console.log(`Failed to upload image small with id: ${cardId}`);
+        console.log(e);
+    }
+}
+
 exports.get_card_images = async function (req, res, next) {
     try {
         const cardList = await YuGiOhCard.find({});
@@ -259,6 +316,10 @@ exports.get_card_images = async function (req, res, next) {
                 console.log(`Card number ${i} with id ${cardList[i].id} already in image db`);
                 continue;
             }
+            
+            //upload image to aws s3
+            await uploadImagesToS3Bucket(cardList[i].id);
+
             for (j = 0; j < cardList[i]['card_images'].length; j++) {
                 console.log("Card number " + i + " image " + j);
                 var imageId = cardList[i]['card_images'][j]['id'];
@@ -307,9 +368,7 @@ exports.get_card_images = async function (req, res, next) {
 
             }
         }
-
-        //ADDED THIS LINE
-        res.send({message: "Images inserted in DB!"});
+        res.send({message: "success"});
     } catch (e) {
         console.log(e);
         next(e);
