@@ -8,6 +8,8 @@ const YuGiOhCard = require('../models/yugioh_card');
 const YuGiOhImage = require('../models/yugioh_image');
 const Translation = require('../models/translation');
 
+require('dotenv').config();
+
 exports.get_db_version = function (req, res, next) {
     var options = {
         host: 'db.ygoprodeck.com',
@@ -251,13 +253,11 @@ function getTranslationForLanguage(languageCode){
 }
 
 const bucketName = 'ygocompanion';
-const userKey = 'AKIA226BUP5UUXWQOBE2';
-const iamUserSecret = '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';
 
 const AWS = require('aws-sdk');
 const s3 = new AWS.S3({
-    accessKeyId: userKey,
-    secretAccessKey: iamUserSecret,
+    accessKeyId: process.env.USER_KEY,
+    secretAccessKey: process.env.USER_SECRET,
     Bucket: bucketName
 });
 const axios = require('axios');
