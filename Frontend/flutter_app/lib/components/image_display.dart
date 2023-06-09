@@ -1,63 +1,29 @@
-// ignore_for_file: overridden_fields
-
-import 'dart:convert';
-
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/cubit/get_image_cubit.dart';
 import 'package:flutter_app/utils/image_type.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ImageDisplay extends StatelessWidget {
   final String cardId;
   final String? banlist;
   final ImageType imageType;
-  @override
-  final Key key;
 
   const ImageDisplay({
-    required this.key,
+    super.key,
     required this.cardId,
     this.banlist,
     this.imageType = ImageType.CARD,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => GetImageCubit(),
-      child: BlocConsumer<GetImageCubit, GetImageState>(
-        listener: (context, state) {},
-        builder: (context, state) {
-          if (state is GetImageInitial) {
-            BlocProvider.of<GetImageCubit>(context).getImage(
-              cardId,
-              banlist,
-              imageType,
-            );
-            return Image.asset(
-              'assets/card_back.png',
-              key: key,
-            );
-          }
-          if (state is GetImageLoading) {
-            return Image.asset(
-              'assets/card_back.png',
-              key: key,
-            );
-          }
-          if (state is GetImageFailed) {
-            return Image.asset(
-              'assets/card_back.png',
-              key: key,
-            );
-          }
-          return Image.memory(
-            base64Decode(
-              BlocProvider.of<GetImageCubit>(context).image,
-            ),
-            key: key,
-          );
-        },
+    return CachedNetworkImage(
+      imageUrl:
+          'https://ygocompanion.s3.eu-central-1.amazonaws.com/${imageType == ImageType.CARD ? 'images' : 'images_small'}/$cardId.jpg',
+      placeholder: (context, url) => Image.asset(
+        'assets/card_back.png',
+      ),
+      errorWidget: (context, url, error) => Image.asset(
+        'assets/card_back.png',
       ),
     );
   }
