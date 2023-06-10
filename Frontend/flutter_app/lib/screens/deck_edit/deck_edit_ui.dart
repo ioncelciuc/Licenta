@@ -122,6 +122,37 @@ class _DeckEditUiState extends State<DeckEditUi> {
     side.sort(sortComparator);
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            if (!widget.isEditable) {
+              Navigator.of(context).pop();
+            } else {
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: const Text('Are you sure you want to exit?'),
+                  content: const Text('Make sure you save first'),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text('Cancel'),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text('Exit'),
+                    ),
+                  ],
+                ),
+              );
+            }
+          },
+        ),
         title: Text(widget.deck.name!),
         centerTitle: true,
         actions: [

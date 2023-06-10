@@ -32,10 +32,10 @@ class _SignUpUiState extends State<SignUpUi> {
       return 'You must choose a password';
     }
     RegExp passwordRegex = RegExp(
-      r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$',
+      r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$',
     );
     if (!passwordRegex.hasMatch(password)) {
-      return 'Password must be at least 8 characters long and contain:\nAn uppercase character\nA lowecase character\nA number\nA special character';
+      return 'Password must be at least 8 characters long and contain:\nAn uppercase character\nA lowecase character\nA number';
     }
     if (password != repeatPassword) {
       return 'Passwords don\'t match';
