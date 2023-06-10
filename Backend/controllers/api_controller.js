@@ -218,7 +218,7 @@ exports.empty_deck = async function(req, res, next){
 exports.search_decks = async function(req, res, next){
     try {
         let query = req.body.query;
-        const decks = await Deck.find({ name: { $regex: query, $options: 'i' }});
+        const decks = await Deck.find({ name: { $regex: query, $options: 'i' }, mainDeckCount: { $gte: 40 }});
         res.json({ success: true, decks: decks });
     } catch (e) {
         console.log(e);
